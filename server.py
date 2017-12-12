@@ -17,13 +17,13 @@ def route_add_question():
 
 
 @app.route('/question/<question_id>')
-def route_question_detail():
-    pass
+def route_question_detail(question_id):
+    return render_template('question_detail.html', question_id=question_id)
 
 
 @app.route('/question/<question_id>/new-answer')
-def route_add_answer():
-    pass
+def route_add_answer(question_id):
+    return render_template('add_answer.html', question_id=question_id)
 
 
 if __name__ == '__main__':
