@@ -8,7 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def route_list():
-    pass
+    data_header = data_manager.QUESTION_DATA_HEADER
+    data_table = data_manager.reverse_data()
+    return render_template('index.html', data_header=data_header, data_table=data_table)
 
 
 @app.route('/add-question')
