@@ -10,7 +10,9 @@
         <table border="1">
             <thead>
                 <tr>
-                    <th></th>
+                    {% for header in question_header %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +34,7 @@
                 </tr>
             </tbody>
         </table>
-        <p><a href=""</p>
+        <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
     </body>
 </html>
