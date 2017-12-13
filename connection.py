@@ -25,13 +25,13 @@ def csv_appender(filename, dict_to_add, question=True):
     elif question:
         dict_to_add.update({"id": int(table[-1]["id"]) + 1})
     elif table == [] and not question:
-        dict_to_add.update({"a_id": 1})
+        dict_to_add.update({"id": 1})
     else:
         answer_id_list = []
         for line in table:
-            if line["id"] == dict_to_add["id"]:
-                answer_id_list.append(int(dict_to_add["a_id"]))
-        dict_to_add.update({"a_id": max(answer_id_list) + 1})
+            if line["question_id"] == dict_to_add["question_id"]:
+                answer_id_list.append(int(dict_to_add["id"]))
+        dict_to_add.update({"id": max(answer_id_list) + 1})
     table.append(dict_to_add)
     write_to_file(filename, table)
     return table
@@ -44,7 +44,7 @@ def csv_updater(filename, dict_to_update):
 
     table = csv_reader(filename)
     for line in table:
-        if int(line["a_id"]) == int(dict_to_update["a_id"]) and int(line["id"]) == int(dict_to_update["id"]):
+        if int(line["id"]) == int(dict_to_update["id"]) and int(line["question_id"]) == int(dict_to_update["question_id"]):
             for key in line:
                 line[key] = dict_to_update[key]
         elif int(line["id"]) == int(dict_to_update["id"]):
