@@ -1,7 +1,7 @@
 {% extends 'question_detail.html' %}
 {% block answer_text_area %}
-    <form action="{{ question_detail_url }}" method="POST" id="add_answer_form" name="add_answer_form">
-        <label for="add_answer">Add answer:<br></label>
+    <form action="{{ add_answer_url }}" method="POST" id="add_answer_form" name="add_answer_form">
+        <label for="add_answer">Add new answer:<br></label>
         <textarea name="add_answer" id="add_answer" cols="80" rows="10"></textarea>
     </form>
 {% endblock %}
