@@ -21,18 +21,10 @@ def csv_appender(filename, dict_to_add, question=True):
     question - if True, the input is a question, else it is an answer"""
 
     table = csv_reader(filename)
-    if table == [] and question:
-        dict_to_add.update({"id": 1})
-    elif question:
-        dict_to_add.update({"id": int(table[-1]["id"]) + 1})
-    elif table == [] and not question:
+    if table == []:
         dict_to_add.update({"id": 1})
     else:
-        answer_id_list = []
-        for line in table:
-            if line["question_id"] == dict_to_add["question_id"]:
-                answer_id_list.append(int(dict_to_add["id"]))
-        dict_to_add.update({"id": max(answer_id_list) + 1})
+        dict_to_add.update({"id": int(table[-1]["id"]) + 1})
     dict_to_add.update({"submisson_time": util.generate_timestamp()})
     table.append(dict_to_add)
     write_to_file(filename, table)
