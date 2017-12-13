@@ -21,14 +21,15 @@ def route_add_question():
 @app.route('/question/<question_id>')
 def route_question_detail(question_id):
     question_header = data_manager.QUESTION_DATA_HEADER
-    add_answer_url = url_for('route_add_answer',question_id=question_id)
+    add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('question_detail.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url)
 
 
 @app.route('/question/<question_id>/new-answer')
 def route_add_answer(question_id):
     question_header = data_manager.QUESTION_DATA_HEADER
-    return render_template('add_answer.html', question_id=question_id, question_header=question_header)
+    question_detail_url = url_for('route_question_detail', question_id=question_id)
+    return render_template('add_answer.html', question_id=question_id, question_header=question_header, question_detail_url=question_detail_url)
 
 
 if __name__ == '__main__':
