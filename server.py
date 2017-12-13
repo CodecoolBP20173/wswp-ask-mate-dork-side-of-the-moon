@@ -29,16 +29,27 @@ def route_add_question():
 
 @app.route('/question/<question_id>')
 def route_question_detail(question_id):
-    question_header = data_manager.QUESTION_DATA_HEADER
+    question_header = data_manager.QUESTION_DATA_HEADER_QUESTIONS_PAGE
+    question_data = data_manager.get_question_data(question_id)
+    answer_header = data_manager.ANSWER_DATA_HEADER_QUESTIONS_PAGE
+    answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
-    return render_template('question_detail.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url)
+    return render_template('question_detail.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header, answers=answers)
 
 
-@app.route('/question/<question_id>/new-answer')
+@app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
 def route_add_answer(question_id):
-    question_header = data_manager.QUESTION_DATA_HEADER
+    question_header = data_manager.QUESTION_DATA_HEADER_QUESTIONS_PAGE
+    question_data = data_manager.get_question_data(question_id)
+    answer_header = data_manager.ANSWER_DATA_HEADER_QUESTIONS_PAGE
+    answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
-    return render_template('add_answer.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url)
+    question_detail_url = url_for('route_question_detail', question_id=question_id)
+    if request.method == 'POST':
+        new_answer = request.form.to_dict()
+        data_manager.add_new_answer_to_csv(new_answer)
+        return redirect(question_detail_url)
+    return render_template('add_answer.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header, answers=answers)
 
 
 if __name__ == '__main__':

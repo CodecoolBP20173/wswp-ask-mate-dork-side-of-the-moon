@@ -17,21 +17,31 @@
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
+                    {% for header in question_header %}
+                        <td>{{ question_data[header] }}</td>
+                    {% endfor %}
                 </tr>
             </tbody>
         </table>
-        <p></p>
-        <table>
+        <p><br></p>
+        <h2>Answers for this question:</h2>
+        <table border="1">
             <thead>
                 <tr>
-                    <th></th>
+                    {% for header in answer_header %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                </tr>
+                {% for row in answers %}
+                    <tr>
+
+                        {% for header in answer_header %}
+                            <td>{{ row[header] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
