@@ -8,8 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def route_list():
+    question_file = data_manager.QUESTION_DATA_FILE_PATH
     data_header = data_manager.QUESTION_DATA_HEADER
-    data_table = data_manager.reverse_data()
+    data_table = data_manager.reverse_data(question_file)
     return render_template('index.html', data_header=data_header, data_table=data_table)
 
 
