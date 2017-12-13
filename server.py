@@ -37,8 +37,8 @@ def route_question_detail(question_id):
 @app.route('/question/<question_id>/new-answer')
 def route_add_answer(question_id):
     question_header = data_manager.QUESTION_DATA_HEADER
-    question_detail_url = url_for('route_question_detail', question_id=question_id)
-    return render_template('add_answer.html', question_id=question_id, question_header=question_header, question_detail_url=question_detail_url)
+    add_answer_url = url_for('route_add_answer', question_id=question_id)
+    return render_template('add_answer.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url)
 
 
 if __name__ == '__main__':
