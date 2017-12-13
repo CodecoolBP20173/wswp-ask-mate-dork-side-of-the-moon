@@ -1,4 +1,5 @@
 import csv
+import util
 
 
 def csv_reader(filename):
@@ -32,6 +33,7 @@ def csv_appender(filename, dict_to_add, question=True):
             if line["question_id"] == dict_to_add["question_id"]:
                 answer_id_list.append(int(dict_to_add["id"]))
         dict_to_add.update({"id": max(answer_id_list) + 1})
+    dict_to_add.update({"submisson_time": util.generate_timestamp()})
     table.append(dict_to_add)
     write_to_file(filename, table)
     return table
