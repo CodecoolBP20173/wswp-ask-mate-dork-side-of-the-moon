@@ -5,9 +5,10 @@
     <title>Welcome on AskMate!</title>
 </head>
 <body>
-    <h1>Questions:</h1>
+    <h1 align="center">Welcome on AskMate!</h1>
+    <h2>Questions:</h2>
     <p><a href="/add-question">Add new question</a></p>
-    <table border="1" align="center" width="100%">
+    <table border="1" align="center">
         <thead>
             <tr>
                 {% for head in data_header %}
@@ -18,9 +19,9 @@
         <tbody>
                 {% for data in data_table %}
                     <tr>
-                        <td>{{ data['id'] }}</td>
-                        <td>{{ data['submisson_time'] }}</td>
-                        <td>{{ data['view_number'] }}</td>
+                        <td align="center">{{ data['id'] }}</td>
+                        <td align="center">{{ data['submisson_time'] }}</td>
+                        <td align="center">{{ data['view_number'] }}</td>
                         <td><a href="{{ url_for('route_question_detail', question_id=data['id']) }}">{{ data['title'] }}</a></td>
                         <td>{{ data['message'] }}</td>
                     </tr>

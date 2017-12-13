@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 import data_manager
 import connection
+import util
 
 app = Flask(__name__)
 
@@ -10,8 +11,9 @@ app = Flask(__name__)
 @app.route('/list')
 def route_list():
     question_file = data_manager.QUESTION_DATA_FILE_PATH
-    data_header = data_manager.QUESTION_DATA_HEADER
+    data_header = ['ID', 'Submission time', 'View number', 'Title', 'Message']
     data_table = data_manager.reverse_data(question_file)
+    data_table = util.convert_timestamp_to_date(data_table)
     return render_template('index.html', data_header=data_header, data_table=data_table)
 
 
