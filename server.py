@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
 import data_manager
+import connection
 
 app = Flask(__name__)
 
@@ -15,7 +16,8 @@ def route_list():
 
 @app.route('/add-question')
 def route_add_question():
-    pass
+    next_question_id = int(connection.csv_reader(data_manager.QUESTION_DATA_FILE_PATH)[-1]["id"]) + 1
+    return render_template('/add_question.html', next_question_id=next_question_id)
 
 
 @app.route('/question/<question_id>')
