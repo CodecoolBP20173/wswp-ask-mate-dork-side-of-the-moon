@@ -23,8 +23,8 @@ def route_add_question():
         new_question = request.form.to_dict()
         connection.csv_appender('sample_data/question.csv', new_question)
         return redirect(url_for('route_question_detail', question_id=connection.csv_reader('sample_data/question.csv')[-1]["id"]))
-    next_question_id = int(connection.csv_reader(data_manager.QUESTION_DATA_FILE_PATH)[-1]["id"]) + 1
-    return render_template('/add_question.html', next_question_id=next_question_id)
+    #next_question_id = int(connection.csv_reader(data_manager.QUESTION_DATA_FILE_PATH)[-1]["id"]) + 1
+    return render_template('/add_question.html')
 
 
 @app.route('/question/<question_id>')

@@ -18,7 +18,7 @@
             <tbody>
                 <tr>
                     {% for header in question_header %}
-                        <td>{{ question_data[header] }}</td>
+                        <td>{{ question_data[header]|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
@@ -38,7 +38,7 @@
                     <tr>
 
                         {% for header in answer_header %}
-                            <td>{{ row[header] }}</td>
+                            <td>{{ row[header]|safe }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}

@@ -43,7 +43,7 @@ def make_display_header(header_list):
 
 
 def increment_view_number(question_id):
-    table = connection.csv_reader(QUESTION_DATA_FILE_PATH)
+    table = connection.csv_reader_from_file(QUESTION_DATA_FILE_PATH)
     view_number_integer = int(table[int(question_id)-1]['view_number'])
     view_number_integer += 1
     table[int(question_id) - 1]['view_number'] = view_number_integer
