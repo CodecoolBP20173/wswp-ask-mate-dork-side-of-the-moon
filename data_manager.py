@@ -34,3 +34,9 @@ def add_new_answer_to_csv(new_answer):
 def get_new_answer_id():
     last_answer_id = connection.csv_reader(ANSWER_DATA_FILE_PATH)[-1]['id']
     return last_answer_id
+
+
+def sort_by_time(filename):
+    data = connection.csv_reader(filename)
+    sorted_data = sorted(data, key=lambda key: key['submisson_time'], reverse=True)
+    return sorted_data
