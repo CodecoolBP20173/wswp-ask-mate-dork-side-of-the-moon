@@ -2,15 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Question {{ question_id }}</title>
+        <title>{{ question_data['title'] }}</title>
     </head>
     <body>
-        <h1>Question {{ question_id }}</h1>
+        <h1>{{ question_data['title'] }}</h1>
         <p></p>
         <table border="1">
             <thead>
                 <tr>
-                    {% for header in question_header %}
+                    {% for header in question_header_display %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
@@ -23,12 +23,12 @@
                 </tr>
             </tbody>
         </table>
-        <p><br></p>
+        <p><button><a href="/" style="color: black; text-decoration: none">Back to home page</a></button><br></p>
         <h2>Answers for this question:</h2>
         <table border="1">
             <thead>
                 <tr>
-                    {% for header in answer_header %}
+                    {% for header in answer_header_display %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
