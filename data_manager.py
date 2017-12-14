@@ -54,4 +54,3 @@ def sort_by_time(filename):
     data = connection.csv_reader(filename)
     sorted_data = sorted(data, key=lambda key: key['submisson_time'], reverse=True)
     return sorted_data
-
