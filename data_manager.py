@@ -30,7 +30,7 @@ def get_answers_for_question(question_id):
 
 
 def add_new_answer_to_csv(new_answer):
-    connection.csv_appender(ANSWER_DATA_FILE_PATH, new_answer, question=False)
+    connection.csv_appender(ANSWER_DATA_FILE_PATH, new_answer)
 
 
 def get_new_answer_id():
@@ -48,3 +48,10 @@ def increment_view_number(question_id):
     view_number_integer += 1
     table[int(question_id) - 1]['view_number'] = view_number_integer
     connection.write_to_file(QUESTION_DATA_FILE_PATH, table)
+
+
+def sort_by_time(filename):
+    data = connection.csv_reader(filename)
+    sorted_data = sorted(data, key=lambda key: key['submisson_time'], reverse=True)
+    return sorted_data
+
