@@ -28,7 +28,7 @@ def get_answers_for_question(question_id):
 
 
 def add_new_answer_to_csv(new_answer):
-    connection.csv_appender(ANSWER_DATA_FILE_PATH, new_answer, question=False)
+    connection.csv_appender(ANSWER_DATA_FILE_PATH, new_answer)
 
 
 def get_new_answer_id():
