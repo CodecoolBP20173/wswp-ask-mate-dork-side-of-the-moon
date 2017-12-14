@@ -1,6 +1,5 @@
 import csv
 import util
-import data_manager
 
 
 def csv_reader_from_file(filename):
