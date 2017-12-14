@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <title>AskMate | Add question</title>
 </head>
 <body>
     <h1>Add question</h1>
     <form action='/add-question' method="post">
         <p>
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title">
+            <label for="title">Title</label><br>
+            <input type="text" name="title" id="title" size="81">
         </p>
         <p>
-            <label for="message"></label>
-            <textarea name="message" id="message" cols="30" rows="10"></textarea>
+            <label for="message">Question</label><br>
+            <textarea name="message" id="message" cols="80" rows="10"></textarea>
         </p>
         <input type="hidden" name="view_number" value="0">
         <button type="submit">Add question</button>
