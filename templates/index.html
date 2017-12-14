@@ -22,8 +22,8 @@
                         <td align="center">{{ data['id'] }}</td>
                         <td align="center">{{ data['submisson_time'] }}</td>
                         <td align="center">{{ data['view_number'] }}</td>
-                        <td><a href="{{ url_for('route_question_detail', question_id=data['id']) }}">{{ data['title'] }}</a></td>
-                        <td>{{ data['message'] }}</td>
+                        <td><a href="{{ url_for('route_question_detail', question_id=data['id']) }}">{{ data['title']|safe }}</a></td>
+                        <td>{{ data['message']|safe}}</td>
                     </tr>
                 {% endfor %}
         </tbody>
