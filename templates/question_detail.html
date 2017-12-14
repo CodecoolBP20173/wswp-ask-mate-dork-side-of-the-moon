@@ -19,7 +19,7 @@
             <tbody>
                 <tr>
                     {% for header in question_header %}
-                        <td>{{ question_data[header]|safe }}</td>
+                        <td align="{{ 'center' if header == 'view_number' }}">{{ question_data[header]|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
