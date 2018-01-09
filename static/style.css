@@ -1,0 +1,17 @@
+body {
+    background-image: url("cc2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1, h2, label {
+    color: white;
+}
+table {
+    background-color: white;
+}
+
+a {
+    color: #0000EE;
+}

@@ -22,8 +22,8 @@ def route_add_question():
     if request.method == 'POST':
         new_question = request.form.to_dict()
         connection.csv_appender('sample_data/question.csv', new_question)
-        return redirect(url_for('route_question_detail', question_id=connection.csv_reader('sample_data/question.csv')[-1]["id"]))
-    #next_question_id = int(connection.csv_reader(data_manager.QUESTION_DATA_FILE_PATH)[-1]["id"]) + 1
+        return redirect(url_for('route_question_detail',
+                                question_id=connection.csv_reader('sample_data/question.csv')[-1]["id"]))
     return render_template('/add_question.html')
 
 
@@ -37,7 +37,10 @@ def route_question_detail(question_id):
     answer_header_display = data_manager.make_display_header(answer_header)
     answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
-    return render_template('question_detail.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header, answers=answers, question_header_display=question_header_display, answer_header_display=answer_header_display)
+    return render_template('question_detail.html', question_id=question_id, question_header=question_header,
+                           add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header,
+                           answers=answers, question_header_display=question_header_display,
+                           answer_header_display=answer_header_display)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
@@ -54,12 +57,15 @@ def route_add_answer(question_id):
         new_answer = request.form.to_dict()
         data_manager.add_new_answer_to_csv(new_answer)
         return redirect(question_detail_url)
-    return render_template('add_answer.html', question_id=question_id, question_header=question_header, add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header, answers=answers, question_header_display=question_header_display, answer_header_display=answer_header_display)
+    return render_template('add_answer.html', question_id=question_id, question_header=question_header,
+                           add_answer_url=add_answer_url, question_data=question_data, answer_header=answer_header,
+                           answers=answers, question_header_display=question_header_display,
+                           answer_header_display=answer_header_display)
 
 
 if __name__ == '__main__':
     app.run(
-        # host='0.0.0.0', TODO: uncomment this line when finished
+        host='0.0.0.0',
         port=8000,
         debug=True,
     )

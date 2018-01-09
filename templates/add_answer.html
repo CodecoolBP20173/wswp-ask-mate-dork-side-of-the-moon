@@ -2,7 +2,7 @@
 {% block answer_text_area %}
     <form action="{{ add_answer_url }}" method="POST" id="add_answer_form" name="add_answer_form">
         <label for="add_answer">Add new answer:<br></label>
-        <textarea name="message" id="message" cols="80" rows="10"></textarea>
+        <textarea name="message" id="message" cols="80" rows="10" minlength="1"></textarea>
         <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
         <input type="text" id="id" name="id" value="0" hidden>
     </form>

@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{{ question_data['title'] }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
         <h1>{{ question_data['title'] }}</h1>
@@ -18,7 +19,7 @@
             <tbody>
                 <tr>
                     {% for header in question_header %}
-                        <td>{{ question_data[header]|safe }}</td>
+                        <td align="{{ 'center' if header == 'view_number' }}">{{ question_data[header]|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
