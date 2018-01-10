@@ -8,6 +8,13 @@ app = Flask(__name__)
 
 
 @app.route('/')
+def index_page():
+    data_header = data_manager.FANCY_QUESTION_DATA_HEADER
+    data_table = data_manager.get_five_last_question_for_index()
+    five_questions = True
+    return render_template('index.html', data_header=data_header, data_table=data_table, five_questions=five_questions)
+
+
 @app.route('/list')
 def route_list():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER

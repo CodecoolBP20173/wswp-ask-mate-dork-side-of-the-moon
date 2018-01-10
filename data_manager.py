@@ -14,6 +14,17 @@ def get_question_for_index(cursor):
 
 
 @connection.connection_handler
+def get_five_last_question_for_index(cursor):
+    cursor.execute("""
+                      SELECT id, submission_time, view_number, title, message FROM question
+                      ORDER BY submission_time DESC 
+                      LIMIT 5;
+                      """)
+    question_data = cursor.fetchall()
+    return question_data
+
+
+@connection.connection_handler
 def get_question_data(cursor, question_id):
     cursor.execute("""
                       SELECT submission_time, view_number, title, message FROM question

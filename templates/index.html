@@ -28,5 +28,8 @@
         </tbody>
     </table>
     <p><a href="/add-question"><button>Add new question</button></a></p>
+    {% if five_questions == True %}
+    <p><a href=" {{ url_for('route_list') }}"><button>Show all of the questions</button></a></p>
+    {% endif %}
 </body>
 </html>
