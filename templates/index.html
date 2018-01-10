@@ -28,7 +28,7 @@
                         <td align="center">{{ data['submission_time'] }}</td>
                         <td align="center">{{ data['view_number'] }}</td>
                         <td><a href="{{ url_for('route_question_detail', question_id=data['id']) }}">{{ data['title']|safe }}</a></td>
-                        <td>{{ data['message']|safe}}</td>
+                        <td>{{ data['message']|replace('\n', '<br>')|safe }}</td>
                     </tr>
                 {% endfor %}
         </tbody>
