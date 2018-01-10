@@ -7,7 +7,7 @@ def get_datetime():
 
 
 def initialize_view_number_and_vote_number_and_add_datetime(new_question):
-    new_question.update({"view_number": 0, "vote_number": 0, "submission_time": get_datetime()})
+    new_question.update({"view_number": 0, "vote_number": 0, "submission_time": get_datetime(), "image": "X"})
     return new_question
 
 

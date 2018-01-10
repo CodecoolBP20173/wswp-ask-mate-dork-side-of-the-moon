@@ -8,6 +8,12 @@
 <body>
     <h1 align="center">Welcome to AskMate!</h1>
     <h2>Questions:</h2>
+
+    <form action="{{ url_for('search_question') }}" method="GET">
+        <input type="text" name="q" id="q" placeholder="search">
+        <button type="submit">Search question</button>
+    </form><br>
+
     <table border="1" align="center" width="100%">
         <thead>
             <tr>

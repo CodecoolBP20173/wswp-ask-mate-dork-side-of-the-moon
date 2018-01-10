@@ -69,6 +69,18 @@ def route_add_answer(question_id):
                            answers=answers)
 
 
+@app.route('/search-question', methods=['GET'])
+def search_question():
+    data_header = data_manager.FANCY_QUESTION_DATA_HEADER
+    search_phrase = request.args.get('q')
+    questions = data_manager.search_questions(search_phrase)
+    five_questions = True
+    return render_template('index.html',
+                           data_header=data_header,
+                           data_table=questions,
+                           five_questions=five_questions)
+
+
 @app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def add_question_comment(question_id):
     question_detail_url = url_for('route_question_detail', question_id=question_id)
@@ -80,7 +92,11 @@ def add_question_comment(question_id):
     add_question_comment_url = url_for('add_question_comment', question_id=question_id)
     question = data_manager.get_question_data(question_id)
     data_header = ['Submission time', 'Title', 'Message']
-    return render_template('add_comment_question.html', add_question_comment_url=add_question_comment_url, question=question, data_header=data_header, question_id=question_id)
+    return render_template('add_comment_question.html',
+                           add_question_comment_url=add_question_comment_url,
+                           question=question,
+                           data_header=data_header,
+                           question_id=question_id)
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
