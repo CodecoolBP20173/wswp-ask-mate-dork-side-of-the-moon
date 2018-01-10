@@ -64,6 +64,18 @@ def route_add_answer(question_id):
                            answers=answers)
 
 
+@app.route('/search-question', methods=['GET'])
+def search_question():
+    data_header = data_manager.FANCY_QUESTION_DATA_HEADER
+    search_phrase = request.args.get('q')
+    questions = data_manager.search_questions(search_phrase)
+    five_questions = True
+    return render_template('index.html',
+                           data_header=data_header,
+                           data_table=questions,
+                           five_questions=five_questions)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

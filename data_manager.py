@@ -80,5 +80,15 @@ def add_question(cursor, new_question):
     return question_id
 
 
+@connection.connection_handler
+def search_questions(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE title LIKE %(search)s OR message LIKE %(search)s;
+                    """, {'search': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+    return questions
+
+
 def sort_by_time(filename):
     pass
