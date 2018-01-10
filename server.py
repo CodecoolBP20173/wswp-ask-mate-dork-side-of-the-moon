@@ -117,6 +117,25 @@ def add_answer_comment(answer_id):
                            answer_data=answer_data)
 
 
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+def modify_question(question_id):
+    if request.method == 'POST':
+        question_to_update = request.form.to_dict()
+        data_manager.edit_question(question_to_update)
+        return redirect(url_for('route_question_detail',
+                                question_id=question_id))
+    question = data_manager.get_question_data(question_id)[0]
+    return render_template('add_question.html',
+                           question=question,
+                           question_id=question_id)
+
+
+@app.route('/question/<question_id>/delete', methods=['POST', 'GET'])
+def delete_question(question_id):
+    data_manager.delete_question_and_its_answers(question_id)
+    return redirect('/')
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

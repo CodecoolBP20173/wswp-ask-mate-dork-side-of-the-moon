@@ -24,6 +24,8 @@
                 </tr>
             </tbody>
         </table>
+        <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a></p>
+        <p><a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
         <h2>Comments for this question:</h2>
        <table border="1" id="question_comments">
             <thead>
@@ -51,6 +53,7 @@
                     {% for header in ('Submission_time', 'Message') %}
                         <th>{{ header }}</th>
                     {% endfor %}
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
