@@ -4,8 +4,8 @@
         <label for="add_answer">Add new answer:<br></label>
         <textarea name="message" id="message" cols="80" rows="10" minlength="1"></textarea>
         <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
-        <input type="text" id="id" name="id" value="0" hidden>
+        <input type="number" id="vote_number" name="vote_number" value="0" hidden>
+        <input type="submit" id="submit_answer" form="add_answer_form" value="Submit answer">
     </form>
-    <button type="submit_answer" id="submit_answer" form="add_answer_form" value="Submit answer">Submit answer</button>
 {% endblock %}
 {% block hide_add_new_answer_button %}hidden{% endblock %}
