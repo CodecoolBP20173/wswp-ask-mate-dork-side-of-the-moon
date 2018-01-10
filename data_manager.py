@@ -89,5 +89,15 @@ def add_new_comment(cursor, new_comment):
                    new_comment)
 
 
+@connection.connection_handler
+def get_comments_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT submission_time, message FROM comment
+                    WHERE question_id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+    comments = cursor.fetchall()
+    return comments
+
 def sort_by_time(filename):
     pass
