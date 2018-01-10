@@ -90,10 +90,11 @@ def search_questions(cursor, search_phrase):
     return questions
 
 
+@connection.connection_handler
 def add_new_comment(cursor, new_comment):
     cursor.execute("""
                       INSERT INTO comment (question_id, message, submission_time)
-                      VALUES (%(question_id)s, %(message)s, %(submission_time)s) 
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s); 
                       """,
                    new_comment)
 
