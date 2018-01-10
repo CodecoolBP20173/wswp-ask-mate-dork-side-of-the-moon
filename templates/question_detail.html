@@ -11,14 +11,14 @@
         <table border="1">
             <thead>
                 <tr>
-                    {% for header in ('Submission time', 'View number', 'Title', 'Message') %}
+                    {% for header in ('Submission time', 'View number', 'Message') %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {% for field in ('submission_time', 'view_number', 'title, message') %}
+                    {% for field in ('submission_time', 'view_number', 'message') %}
                         <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|safe }}</td>
                     {% endfor %}
                 </tr>
@@ -29,7 +29,7 @@
         <table border="1">
             <thead>
                 <tr>
-                    {% for header in answer_header_display %}
+                    {% for header in ('Submission_time', 'Message') %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
@@ -37,8 +37,7 @@
             <tbody>
                 {% for row in answers %}
                     <tr>
-
-                        {% for field in (submission_time, message) %}
+                        {% for field in ('submission_time', 'message') %}
                             <td>{{ row[field]|safe }}</td>
                         {% endfor %}
                     </tr>

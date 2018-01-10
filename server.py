@@ -26,16 +26,17 @@ def route_list():
 def route_add_question():
     if request.method == 'POST':
         new_question = request.form.to_dict()
-        connection.csv_appender('sample_data/question.csv', new_question)
+        new_question_add_to_database = util.initialize_view_number_and_vote_number_and_add_datetime(new_question)
+        question_id = data_manager.add_question(new_question_add_to_database)[0]['id']
         return redirect(url_for('route_question_detail',
-                                question_id=connection.csv_reader('sample_data/question.csv')[-1]["id"]))
+                                question_id=question_id))
     return render_template('/add_question.html')
 
 
 @app.route('/question/<question_id>')
 def route_question_detail(question_id):
     data_manager.increment_view_number(question_id)
-    question_data = data_manager.get_question_data(question_id)
+    question_data = data_manager.get_question_data(question_id)[0]
     answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('question_detail.html',

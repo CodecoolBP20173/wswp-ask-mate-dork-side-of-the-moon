@@ -65,5 +65,20 @@ def increment_view_number(cursor, question_id):
                    {'question_id': question_id})
 
 
+@connection.connection_handler
+def add_question(cursor, new_question):
+    cursor.execute("""
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
+                    """, new_question)
+    cursor.execute("""
+                    SELECT id FROM question
+                    ORDER BY id DESC
+                    LIMIT 1;
+                    """)
+    question_id = cursor.fetchall()
+    return question_id
+
+
 def sort_by_time(filename):
     pass
