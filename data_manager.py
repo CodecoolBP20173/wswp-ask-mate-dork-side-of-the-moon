@@ -81,6 +81,15 @@ def add_question(cursor, new_question):
 
 
 @connection.connection_handler
+def search_questions(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE title LIKE %(search)s OR message LIKE %(search)s;
+                    """, {'search': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+    return questions
+
+
 def add_new_comment(cursor, new_comment):
     cursor.execute("""
                       INSERT INTO comment (question_id, message, submission_time)
@@ -98,6 +107,3 @@ def get_comments_for_question(cursor, question_id):
                    {'question_id': question_id})
     comments = cursor.fetchall()
     return comments
-
-def sort_by_time(filename):
-    pass
