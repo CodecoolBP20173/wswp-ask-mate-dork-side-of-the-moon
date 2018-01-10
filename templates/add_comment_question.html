@@ -21,7 +21,7 @@
                         <tr>
                             <td align="center">{{ data['submission_time'] }}</td>
                             <td>>{{ data['title']|safe }}</td>
-                            <td>{{ data['message']|safe}}</td>
+                            <td>{{ data['message']|replace('\n', '<br>')|safe}}</td>
                         </tr>
                     {% endfor %}
         <tbody>
