@@ -58,7 +58,7 @@ def increment_view_number(cursor, question_id):
 def add_question(cursor, new_question):
     cursor.execute("""
                     INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(submission_time)s %(view_number)s %(vote_number)s %(title)s %(message)s %(image)s)
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
                     """, new_question)
     cursor.execute("""
                     SELECT id FROM question
