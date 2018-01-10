@@ -78,7 +78,11 @@ def add_question_comment(question_id):
     add_question_comment_url = url_for('add_question_comment', question_id=question_id)
     question = data_manager.get_question_data(question_id)
     data_header = ['Submission time', 'Title', 'Message']
-    return render_template('add_comment_question.html', add_question_comment_url=add_question_comment_url, question=question, data_header=data_header, question_id=question_id)
+    return render_template('add_comment_question.html',
+                           add_question_comment_url=add_question_comment_url,
+                           question=question,
+                           data_header=data_header,
+                           question_id=question_id)
 
 
 if __name__ == '__main__':
