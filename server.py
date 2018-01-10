@@ -39,13 +39,15 @@ def route_question_detail(question_id):
     question_data = data_manager.get_question_data(question_id)[0]
     answers = data_manager.get_answers_for_question(question_id)
     question_comments = data_manager.get_comments_for_question(question_id)
+    answer_comments = data_manager.get_answer_comments()
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('question_detail.html',
                            question_id=question_id,
                            add_answer_url=add_answer_url,
                            question_data=question_data,
                            answers=answers,
-                           question_comments=question_comments)
+                           question_comments=question_comments,
+                           answer_comments=answer_comments)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
@@ -79,6 +81,24 @@ def add_question_comment(question_id):
     question = data_manager.get_question_data(question_id)
     data_header = ['Submission time', 'Title', 'Message']
     return render_template('add_comment_question.html', add_question_comment_url=add_question_comment_url, question=question, data_header=data_header, question_id=question_id)
+
+
+@app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
+def add_answer_comment(answer_id):
+    question_detail_url = url_for('route_question_detail', question_id=data_manager.get_question_id_for_answer(answer_id)[0]['question_id'])
+    if request.method == 'POST':
+        new_comment = request.form.to_dict()
+        new_comment['submission_time'] = util.get_datetime()
+        data_manager.add_new_answer_comment(new_comment)
+        return redirect(question_detail_url)
+
+    answer_data = data_manager.get_answer_data(answer_id)[0]
+    add_comment_url = url_for('add_answer_comment', answer_id=answer_id)
+    return render_template('add_comment_answer.html',
+                           answer_id=answer_id,
+                           question_detail_url=question_detail_url,
+                           add_comment_url=add_comment_url,
+                           answer_data=answer_data)
 
 
 if __name__ == '__main__':

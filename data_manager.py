@@ -36,9 +36,20 @@ def get_question_data(cursor, question_id):
 
 
 @connection.connection_handler
-def get_answers_for_question(cursor, question_id):
+def get_answer_data(cursor, answer_id):
     cursor.execute("""
                       SELECT submission_time, message FROM answer
+                      WHERE id = %(answer_id)s;
+                      """,
+                   {'answer_id': answer_id})
+    answer_data = cursor.fetchall()
+    return answer_data
+
+
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute("""
+                      SELECT submission_time, message, id FROM answer
                       WHERE question_id = %(question_id)s;
                       """,
                    {'question_id': question_id})
@@ -90,6 +101,15 @@ def add_new_comment(cursor, new_comment):
 
 
 @connection.connection_handler
+def add_new_answer_comment(cursor, new_comment):
+    cursor.execute("""
+                      INSERT INTO comment (answer_id, message, submission_time)
+                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s) 
+                    """,
+                   new_comment)
+
+
+@connection.connection_handler
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
                     SELECT submission_time, message FROM comment
@@ -98,6 +118,27 @@ def get_comments_for_question(cursor, question_id):
                    {'question_id': question_id})
     comments = cursor.fetchall()
     return comments
+
+
+@connection.connection_handler
+def get_answer_comments(cursor):
+    cursor.execute("""
+                    SELECT submission_time, message FROM comment
+                   """)
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection.connection_handler
+def get_question_id_for_answer(cursor, answer_id):
+    cursor.execute("""
+                    SELECT question_id FROM answer
+                    WHERE id = %(answer_id)s;
+                   """,
+                   {'answer_id': answer_id})
+    question_id = cursor.fetchall()
+    return question_id
+
 
 def sort_by_time(filename):
     pass

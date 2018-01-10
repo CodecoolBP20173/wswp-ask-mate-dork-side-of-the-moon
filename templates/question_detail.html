@@ -59,6 +59,7 @@
                         {% for field in ('submission_time', 'message') %}
                             <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
+                        <td><button><a href="/answer/{{ row['id'] }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
