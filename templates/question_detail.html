@@ -11,15 +11,15 @@
         <table border="1">
             <thead>
                 <tr>
-                    {% for header in question_header_display %}
+                    {% for header in ('Submission time', 'View number', 'Title', 'Message') %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {% for header in question_header %}
-                        <td align="{{ 'center' if header == 'view_number' }}">{{ question_data[header]|safe }}</td>
+                    {% for field in ('submission_time', 'view_number', 'title, message') %}
+                        <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
@@ -38,8 +38,8 @@
                 {% for row in answers %}
                     <tr>
 
-                        {% for header in answer_header %}
-                            <td>{{ row[header]|safe }}</td>
+                        {% for field in (submission_time, message) %}
+                            <td>{{ row[field]|safe }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
