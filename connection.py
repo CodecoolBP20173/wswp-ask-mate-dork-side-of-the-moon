@@ -1,73 +1,44 @@
-import csv
-import util
+import os
+import psycopg2
+import psycopg2.extras
 
 
-def csv_reader_from_file(filename):
-    """This function returns the database from file"""
+def get_connection_string():
+    user_name = os.environ.get('PSQL_USER_NAME')
+    password = os.environ.get('PSQL_PASSWORD')
+    host = os.environ.get('PSQL_HOST')
+    database_name = os.environ.get('PSQL_DB_NAME')
 
-    table = []
-    with open(filename) as raw_data:
-        data = csv.DictReader(raw_data)
-        for line in data:
-            table.append(line)
-    return table
+    env_variables_defined = user_name and password and host and database_name
 
-
-
-def csv_reader(filename):
-    """This function modify the table from .csv file
-    for jinja display"""
-
-    table = csv_reader_from_file(filename)
-    for line in table:
-        for key in line:
-            line[key] = line[key].replace('\n', '<br>')
-            line[key] = line[key].replace('\r\n', '<br>')
-            line[key] = line[key].replace('\r', '<br>')
-    return table
-
-
-def csv_appender(filename, dict_to_add):
-    """This function appends a new input to the existing database,
-    and writes the whole database back to file. Arguments:
-    filename - reads the database from here, and write it back to this file.
-    dict_to_add - the new input as a dictionary.
-    question - if True, the input is a question, else it is an answer"""
-
-    table = csv_reader_from_file(filename)
-    if table == []:
-        dict_to_add.update({"id": 1})
+    if env_variables_defined:
+        return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
+            user_name=user_name,
+            password=password,
+            host=host,
+            database_name=database_name
+        )
     else:
-        dict_to_add.update({"id": int(table[-1]["id"]) + 1})
-    dict_to_add.update({"submisson_time": util.generate_timestamp()})
-    table.append(dict_to_add)
-    write_to_file(filename, table)
-    return table
+        raise KeyError('Some necessary environment variable(s) are not defined')
 
 
-def csv_updater(filename, dict_to_update):
-    """This function updates the database (from filename)
-    with the new information (from dict_to_update), even
-    if it's a question or an answer"""
-
-    table = csv_reader_from_file(filename)
-    for line in table:
-        if int(line["id"]) == int(dict_to_update["id"]) and int(line["question_id"]) == int(dict_to_update["question_id"]):
-            for key in line:
-                line[key] = dict_to_update[key]
-        elif int(line["id"]) == int(dict_to_update["id"]):
-            for key in line:
-                line[key] = dict_to_update[key]
-    write_to_file(filename, table)
-    return table
+def open_database():
+    try:
+        connection_string = get_connection_string()
+        connection = psycopg2.connect(connection_string)
+        connection.autocommit = True
+    except psycopg2.DatabaseError as exception:
+        print('Database connection problem')
+        raise exception
+    return connection
 
 
-def write_to_file(filename, table):
-    """This database writes the appended or updated
-    database back to file. Returns None."""
-
-    header = table[0].keys()
-    with open(filename, 'w') as raw_data:
-        data = csv.DictWriter(raw_data, fieldnames=header)
-        data.writeheader()
-        data.writerows(table)
+def connection_handler(function):
+    def wrapper(*args, **kwargs):
+        connection = open_database()
+        dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        ret_value = function(dict_cur, *args, **kwargs)
+        dict_cur.close()
+        connection.close()
+        return ret_value
+    return wrapper
