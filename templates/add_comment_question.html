@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>AskMate | Add comment</title>
+</head>
+<body>
+    <h1>Add comment to Question</h1>
+    <label for="question_table">The question:</label><br>
+    <table border="1" name="question_table" align="center" width="100%">
+        <thead>
+            <tr>
+                {% for head in data_header %}
+                    <th>{{ head }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for data in question %}
+                        <tr>
+                            <td align="center">{{ data['submission_time'] }}</td>
+                            <td>>{{ data['title']|safe }}</td>
+                            <td>{{ data['message']|safe}}</td>
+                        </tr>
+                    {% endfor %}
+        <tbody>
+    </table>
+    <form action="{{ add_question_comment_url }}" method="POST" name="add_comment_form">
+        <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
+        <p>
+            <label for="message">Comment:</label><br>
+            <textarea name="message" cols="80" rows="10" minlength="5"></textarea>
+        </p>
+        <button type="submit">Add comment</button>
+        <button><a href="/" style="color: black; text-decoration: none">Back to home page</a></button>
+    </form>
+</body>
+</html>

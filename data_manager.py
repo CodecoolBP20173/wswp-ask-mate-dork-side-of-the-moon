@@ -80,5 +80,14 @@ def add_question(cursor, new_question):
     return question_id
 
 
+@connection.connection_handler
+def add_new_comment(cursor, new_comment):
+    cursor.execute("""
+                      INSERT INTO comment (question_id, message, submission_time)
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s) 
+                      """,
+                   new_comment)
+
+
 def sort_by_time(filename):
     pass

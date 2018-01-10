@@ -64,6 +64,20 @@ def route_add_answer(question_id):
                            answers=answers)
 
 
+@app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
+def add_question_comment(question_id):
+    question_detail_url = url_for('route_question_detail', question_id=question_id)
+    if request.method == 'POST':
+        new_comment = request.form.to_dict()
+        new_comment = util.initialize_view_number_and_vote_number_and_add_datetime(new_comment)
+        data_manager.add_new_comment(new_comment)
+        return redirect(question_detail_url)
+    add_question_comment_url = url_for('add_question_comment', question_id=question_id)
+    question = data_manager.get_question_data(question_id)
+    data_header = ['Submission time', 'Title', 'Message']
+    return render_template('add_comment_question.html', add_question_comment_url=add_question_comment_url, question=question, data_header=data_header, question_id=question_id)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
