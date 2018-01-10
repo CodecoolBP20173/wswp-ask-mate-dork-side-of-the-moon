@@ -90,5 +90,20 @@ def search_questions(cursor, search_phrase):
     return questions
 
 
-def sort_by_time(filename):
-    pass
+def add_new_comment(cursor, new_comment):
+    cursor.execute("""
+                      INSERT INTO comment (question_id, message, submission_time)
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s) 
+                      """,
+                   new_comment)
+
+
+@connection.connection_handler
+def get_comments_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT submission_time, message FROM comment
+                    WHERE question_id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+    comments = cursor.fetchall()
+    return comments

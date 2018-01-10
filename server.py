@@ -38,12 +38,14 @@ def route_question_detail(question_id):
     data_manager.increment_view_number(question_id)
     question_data = data_manager.get_question_data(question_id)[0]
     answers = data_manager.get_answers_for_question(question_id)
+    question_comments = data_manager.get_comments_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('question_detail.html',
                            question_id=question_id,
                            add_answer_url=add_answer_url,
                            question_data=question_data,
-                           answers=answers)
+                           answers=answers,
+                           question_comments=question_comments)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
@@ -51,10 +53,11 @@ def route_add_answer(question_id):
     question_detail_url = url_for('route_question_detail', question_id=question_id)
     if request.method == 'POST':
         new_answer = request.form.to_dict()
+        new_answer['submission_time'] = util.get_datetime()
         data_manager.add_new_answer(new_answer)
         return redirect(question_detail_url)
 
-    question_data = data_manager.get_question_data(question_id)
+    question_data = data_manager.get_question_data(question_id)[0]
     answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('add_answer.html',
@@ -74,6 +77,20 @@ def search_question():
                            data_header=data_header,
                            data_table=questions,
                            five_questions=five_questions)
+
+
+@app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
+def add_question_comment(question_id):
+    question_detail_url = url_for('route_question_detail', question_id=question_id)
+    if request.method == 'POST':
+        new_comment = request.form.to_dict()
+        new_comment = util.initialize_view_number_and_vote_number_and_add_datetime(new_comment)
+        data_manager.add_new_comment(new_comment)
+        return redirect(question_detail_url)
+    add_question_comment_url = url_for('add_question_comment', question_id=question_id)
+    question = data_manager.get_question_data(question_id)
+    data_header = ['Submission time', 'Title', 'Message']
+    return render_template('add_comment_question.html', add_question_comment_url=add_question_comment_url, question=question, data_header=data_header, question_id=question_id)
 
 
 if __name__ == '__main__':

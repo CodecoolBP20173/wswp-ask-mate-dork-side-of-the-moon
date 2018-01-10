@@ -8,7 +8,7 @@
     <body>
         <h1>{{ question_data['title'] }}</h1>
         <p></p>
-        <table border="1">
+        <table border="1" id="questions">
             <thead>
                 <tr>
                     {% for header in ('Submission time', 'View number', 'Message') %}
@@ -19,14 +19,33 @@
             <tbody>
                 <tr>
                     {% for field in ('submission_time', 'view_number', 'message') %}
-                        <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|safe }}</td>
+                        <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|replace('\n', '<br>')|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
         </table>
-        <p><button><a href="/" style="color: black; text-decoration: none">Back to home page</a></button><br></p>
+        <h2>Comments for this question:</h2>
+       <table border="1" id="question_comments">
+            <thead>
+                <tr>
+                    {% for header in ('Submission_time', 'Message') %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in question_comments %}
+                    <tr>
+                        {% for field in ('submission_time', 'message') %}
+                            <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p><button><a href="/question/{{ question_id }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button><br></p>
         <h2>Answers for this question:</h2>
-        <table border="1">
+        <table border="1" id="answers">
             <thead>
                 <tr>
                     {% for header in ('Submission_time', 'Message') %}
@@ -38,7 +57,7 @@
                 {% for row in answers %}
                     <tr>
                         {% for field in ('submission_time', 'message') %}
-                            <td>{{ row[field]|safe }}</td>
+                            <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -46,5 +65,7 @@
         </table>
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
+        <br>
+        <p><button><a href="/" style="color: black; text-decoration: none">Back to home page</a></button><br></p>
     </body>
 </html>
