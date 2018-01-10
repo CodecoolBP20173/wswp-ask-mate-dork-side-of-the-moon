@@ -6,7 +6,7 @@ FANCY_QUESTION_DATA_HEADER = ['Submission time', 'View number', 'Title', 'Messag
 @connection.connection_handler
 def get_question_for_index(cursor):
     cursor.execute("""
-                      SELECT submission_time, view_number, title, message FROM question
+                      SELECT id, submission_time, view_number, title, message FROM question
                       ORDER BY submission_time DESC;
                       """)
     question_data = cursor.fetchall()
