@@ -1,5 +1,17 @@
 import connection
 
+FANCY_QUESTION_DATA_HEADER = ['Submission time', 'View number', 'Title', 'Message']
+
+
+@connection.connection_handler
+def get_question_for_index(cursor):
+    cursor.execute("""
+                      SELECT submission_time, view_number, title, message FROM question
+                      ORDER BY submission_time DESC;
+                      """)
+    question_data = cursor.fetchall()
+    return question_data
+
 
 @connection.connection_handler
 def get_question_data(cursor, question_id):
@@ -22,6 +34,7 @@ def get_answers_for_question(cursor, question_id):
     answer_data = cursor.fetchall()
     return answer_data
 
+
 @connection.connection_handler
 def add_new_answer(cursor, new_answer):
     cursor.execute("""
@@ -29,6 +42,7 @@ def add_new_answer(cursor, new_answer):
                       VALUES (%(submission_time)s, %(question_id)s, %(message)s) 
                       """,
                    new_answer)
+
 
 @connection.connection_handler
 def increment_view_number(cursor, question_id):
@@ -38,6 +52,7 @@ def increment_view_number(cursor, question_id):
                       WHERE id = %(question_id)s; 
                       """,
                    {'question_id': question_id})
+
 
 def sort_by_time(filename):
     pass
