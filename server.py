@@ -51,10 +51,11 @@ def route_add_answer(question_id):
     question_detail_url = url_for('route_question_detail', question_id=question_id)
     if request.method == 'POST':
         new_answer = request.form.to_dict()
+        new_answer['submission_time'] = util.get_datetime()
         data_manager.add_new_answer(new_answer)
         return redirect(question_detail_url)
 
-    question_data = data_manager.get_question_data(question_id)
+    question_data = data_manager.get_question_data(question_id)[0]
     answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('add_answer.html',

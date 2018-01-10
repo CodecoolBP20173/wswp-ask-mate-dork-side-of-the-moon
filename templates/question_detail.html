@@ -19,7 +19,7 @@
             <tbody>
                 <tr>
                     {% for field in ('submission_time', 'view_number', 'message') %}
-                        <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|safe }}</td>
+                        <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|replace('\n', '<br>')|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
@@ -38,7 +38,7 @@
                 {% for row in answers %}
                     <tr>
                         {% for field in ('submission_time', 'message') %}
-                            <td>{{ row[field]|safe }}</td>
+                            <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}

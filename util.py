@@ -3,7 +3,7 @@ import datetime
 
 
 def get_datetime():
-    return datetime.datetime.now()
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def initialize_view_number_and_vote_number_and_add_datetime(new_question):
