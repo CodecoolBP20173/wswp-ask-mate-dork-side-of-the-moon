@@ -149,3 +149,26 @@ def get_question_id_for_answer(cursor, answer_id):
     question_id = cursor.fetchall()
     return question_id
 
+
+@connection.connection_handler
+def edit_question(cursor, question):
+    cursor.execute("""
+                      UPDATE question
+                      SET title = %(title)s, message = %(message)s
+                      WHERE id = %(id)s;
+                    """,
+                   question)
+
+
+@connection.connection_handler
+def delete_question_and_its_answers(cursor, question_id):
+    cursor.execute("""
+                    DELETE FROM answer
+                    WHERE question_id = %(id_to_delete)s;
+                    """, {'id_to_delete': question_id})
+
+    cursor.execute("""
+                    DELETE FROM question
+                    WHERE id = %(id_to_delete)s;
+                    """, {'id_to_delete': question_id})
+
