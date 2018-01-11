@@ -172,3 +172,12 @@ def delete_question_and_its_answers(cursor, question_id):
                     WHERE id = %(id_to_delete)s;
                     """, {'id_to_delete': question_id})
 
+@connection.connection_handler
+def edit_answer(cursor, answer):
+    cursor.execute("""
+                    UPDATE answer
+                    SET message = %(message)s
+                    WHERE id = %(id)s;
+                    """,
+                   answer)
+
