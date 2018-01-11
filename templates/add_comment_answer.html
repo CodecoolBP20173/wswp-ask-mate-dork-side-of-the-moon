@@ -8,7 +8,7 @@
 <body>
     <h1>Add comment to Answer</h1>
     <label for="answer_table">The answer:</label><br>
-    <table border="1" name="answer_table" align="center" width="100%">
+    <table id="answer_table">
         <thead>
             <tr>
                 {% for header in ('Submission time', 'Message') %}
@@ -31,7 +31,7 @@
             <textarea name="message" cols="80" rows="10" minlength="5"></textarea>
         </p>
         <button type="submit">Add comment</button>
-        <button><a href="{{ question_detail_url }}" style="color: black; text-decoration: none">Back to the question page</a></button>
+        <button><a href="{{ question_detail_url }}">Back to the question page</a></button>
     </form>
 </body>
 </html>
