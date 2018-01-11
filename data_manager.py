@@ -202,3 +202,23 @@ def get_question_id_by_comment_id(cursor, comment_id):
     comment_id = cursor.fetchall()
     return comment_id
 
+
+@connection.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT id, message, edited_count
+                    FROM comment
+                    WHERE id = %(id)s;
+                    """,
+                   {'id' : comment_id})
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def edit_comment(cursor, comment):
+    cursor.execute("""
+                    UPDATE comment
+                    SET message = %(message)s
+                    WHERE id = %(id)s;
+                    """,
+                   comment)

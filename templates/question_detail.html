@@ -42,6 +42,8 @@
                             <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
                         <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
+                        <td><a href="{{ url_for('update_comment', comment_id=row['id']) }}" ><button>Update Comment</button></a></td>
+
                     </tr>
                 {% endfor %}
             </tbody>
@@ -81,6 +83,7 @@
                             <tr>
                                 <td>{{ comment['submission_time'] }}</td>
                                 <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
+
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -88,6 +91,7 @@
             </table>
             <br>
         {% endfor %}
+
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
         <br>

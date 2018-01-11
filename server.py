@@ -149,9 +149,20 @@ def route_edit_answer(answer_id):
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
 def delete_comment(comment_id):
-    question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
+    question_id = data_manager.get_question_id_by_comment_id(comment_id)
     data_manager.delete_comment(comment_id)
     return redirect('/question/' + question_id)
+
+
+@app.route('/comments/<comment_id>/edit', methods=['POST', 'GET'])
+def update_comment(comment_id):
+    if request.method == 'POST':
+        comment_to_update = request.form.to_dict()
+        data_manager.edit_comment(comment_to_update)
+        question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
+        return redirect('/question/'+question_id)
+    comment = data_manager.get_comment_by_id(comment_id)
+    return render_template('edit_comment.html', comment_id = comment_id, comment = comment)
 
 
 if __name__ == '__main__':
