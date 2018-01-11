@@ -136,6 +136,13 @@ def delete_question(question_id):
     return redirect('/')
 
 
+@app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
+def delete_comment(comment_id):
+    question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
+    data_manager.delete_comment(comment_id)
+    return redirect('/question/' + question_id)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

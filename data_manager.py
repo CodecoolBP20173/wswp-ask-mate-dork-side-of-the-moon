@@ -122,7 +122,7 @@ def add_new_answer_comment(cursor, new_comment):
 @connection.connection_handler
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT submission_time, message FROM comment
+                    SELECT submission_time, message, id FROM comment
                     WHERE question_id = %(question_id)s;
                    """,
                    {'question_id': question_id})
@@ -172,3 +172,22 @@ def delete_question_and_its_answers(cursor, question_id):
                     WHERE id = %(id_to_delete)s;
                     """, {'id_to_delete': question_id})
 
+
+@connection.connection_handler
+def delete_comment(cursor, comment_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE id=%(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+
+
+@connection.connection_handler
+def get_question_id_by_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT question_id FROM comment
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+    comment_id = cursor.fetchall()
+    return comment_id

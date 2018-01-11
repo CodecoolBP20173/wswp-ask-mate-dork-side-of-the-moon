@@ -30,7 +30,7 @@
        <table border="1" id="question_comments">
             <thead>
                 <tr>
-                    {% for header in ('Submission_time', 'Message') %}
+                    {% for header in ('Submission time', 'Message') %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
@@ -41,6 +41,7 @@
                         {% for field in ('submission_time', 'message') %}
                             <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
+                        <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
