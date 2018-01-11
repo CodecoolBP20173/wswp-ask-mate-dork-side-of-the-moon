@@ -133,7 +133,7 @@ def get_comments_for_question(cursor, question_id):
 @connection.connection_handler
 def get_answer_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message FROM comment
+                    SELECT submission_time, message, answer_id FROM comment
                    """)
     comments = cursor.fetchall()
     return comments

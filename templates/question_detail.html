@@ -24,8 +24,8 @@
                 </tr>
             </tbody>
         </table>
-        <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a></p>
-        <p><a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
+        <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a>
+        <a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
         <h2>Comments for this question:</h2>
        <table border="1" id="question_comments">
             <thead>
@@ -48,26 +48,45 @@
         </table>
         <p><button><a href="/question/{{ question_id }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button><br></p>
         <h2>Answers for this question:</h2>
-        <table border="1" id="answers">
-            <thead>
-                <tr>
-                    {% for header in ('Submission_time', 'Message') %}
-                        <th>{{ header }}</th>
-                    {% endfor %}
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in answers %}
+        {% for answer in answers %}
+            <table border="1" id="answers">
+                <thead>
+                    <tr>
+                        {% for header in ('Submission time', 'Message') %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         {% for field in ('submission_time', 'message') %}
-                            <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
+                            <td>{{ answer[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
-                        <td><button><a href="/answer/{{ row['id'] }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button></td>
+                        <td><button><a href="/answer/{{ answer['id'] }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button></td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <h3>Comments for this answer:</h3>
+            <table border="1" id="answer_comments_table">
+                <thead>
+                    <tr>
+                        <th>Submission time</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in answer_comments %}
+                        {% if comment['answer_id'] == answer['id'] %}
+                            <tr>
+                                <td>{{ comment['submission_time'] }}</td>
+                                <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+        {% endfor %}
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
         <br>
