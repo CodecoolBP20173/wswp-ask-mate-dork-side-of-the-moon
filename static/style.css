@@ -1,20 +1,37 @@
 body {
-    background-image: url("cc2.png");
+    background-image: url("DSOTM.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-position: center;
+
+
 }
 
 h1, h2, label {
-    color: white;
+    color: whitesmoke;
 }
-table {
-    background-color: white;
+table, td, th {
+    background-color: transparent;
+    color: whitesmoke;
+    border-style: solid;
+    border-width: medium;
+    border-color: gainsboro;
+    border-collapse: collapse;
+    text-align: center;
 }
 
+
+
 a {
-    color: #0000EE;
+    color: red;
+    text-decoration: none;
 }
+
+a:hover {
+    color: gray;
+}
+
 
 .recycle_bin{
     max-width: 20px;
