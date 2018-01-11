@@ -41,6 +41,8 @@ def route_question_detail(question_id):
     question_comments = data_manager.get_comments_for_question(question_id)
     answer_comments = data_manager.get_answer_comments()
     add_answer_url = url_for('route_add_answer', question_id=question_id)
+    print(answers)
+    print(answer_comments)
     return render_template('question_detail.html',
                            question_id=question_id,
                            add_answer_url=add_answer_url,
