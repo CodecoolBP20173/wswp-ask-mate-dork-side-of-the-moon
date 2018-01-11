@@ -26,28 +26,30 @@
         </table>
         <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a>
         <a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
+        {% if question_comments %}
         <h2>Comments for this question:</h2>
-       <table id="question_comments">
-            <thead>
-                <tr>
-                    {% for header in ('Submission time', 'Message') %}
-                        <th>{{ header }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in question_comments %}
+            <table id="question_comments">
+                <thead>
                     <tr>
-                        {% for field in ('submission_time', 'message') %}
-                            <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
+                        {% for header in ('Submission time', 'Message') %}
+                            <th>{{ header }}</th>
                         {% endfor %}
-                        <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
-                        <td><a href="{{ url_for('update_comment', comment_id=row['id']) }}" ><button>Update Comment</button></a></td>
-
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for row in question_comments %}
+                        <tr>
+                            {% for field in ('submission_time', 'message') %}
+                                <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
+                            {% endfor %}
+                            <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
+                            <td><a href="{{ url_for('update_comment', comment_id=row['id']) }}" ><button>Update Comment</button></a></td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
         <p><button><a href="/question/{{ question_id }}/new-comment">Add new comment</a></button><br></p>
         <h2>Answers for this question:</h2>
         {% for answer in answers %}
@@ -69,26 +71,28 @@
                     </tr>
                 </tbody>
             </table>
-            <h3>Comments for this answer:</h3>
-            <table id="answer_comments_table">
-                <thead>
-                    <tr>
-                        <th>Submission time</th>
-                        <th>Message</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for comment in answer_comments %}
-                        {% if comment['answer_id'] == answer['id'] %}
-                            <tr>
-                                <td>{{ comment['submission_time'] }}</td>
-                                <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
-                                <td><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% if answer['id'] in answer_id_list_for_comments %}
+                <h3>Comments for this answer:</h3>
+                <table id="answer_comments_table">
+                    <thead>
+                        <tr>
+                            <th>Submission time</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in answer_comments %}
+                            {% if comment['answer_id'] == answer['id'] %}
+                                <tr>
+                                    <td>{{ comment['submission_time'] }}</td>
+                                    <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
+                                    <td><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
             <br>
         {% endfor %}
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>

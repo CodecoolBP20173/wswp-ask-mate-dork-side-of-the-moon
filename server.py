@@ -40,6 +40,7 @@ def route_question_detail(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     question_comments = data_manager.get_comments_for_question(question_id)
     answer_comments = data_manager.get_answer_comments()
+    answer_id_list_for_comments = [row['answer_id'] for row in answer_comments]
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('question_detail.html',
                            question_id=question_id,
@@ -47,7 +48,8 @@ def route_question_detail(question_id):
                            question_data=question_data,
                            answers=answers,
                            question_comments=question_comments,
-                           answer_comments=answer_comments)
+                           answer_comments=answer_comments,
+                           answer_id_list_for_comments=answer_id_list_for_comments)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])

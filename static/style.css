@@ -4,24 +4,38 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-
-
+    font-family: Helvetica;
 }
 
-h1, h2, label {
+h1, h2, h3, label {
     color: whitesmoke;
 }
+
+h3 {
+    margin-left: 3%;
+}
+
 table, td, th {
     background-color: transparent;
     color: whitesmoke;
     border-style: solid;
     border-width: medium;
     border-color: gainsboro;
-    border-collapse: collapse;
     text-align: center;
+    border-collapse: collapse;
 }
 
+td, th {
+    padding: 10px;
+}
 
+#answer_comments_table {
+    margin-left: 3%;
+}
+
+button a{
+    color: black;
+}
 
 a {
     color: red;
@@ -31,7 +45,6 @@ a {
 a:hover {
     color: gray;
 }
-
 
 .recycle_bin{
     max-width: 20px;
