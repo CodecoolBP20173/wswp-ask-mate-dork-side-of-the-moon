@@ -149,7 +149,11 @@ def route_edit_answer(answer_id):
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
 def delete_comment(comment_id):
-    question_id = data_manager.get_question_id_by_comment_id(comment_id)
+    question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
+    if question_id == 'None':
+        answer_id = data_manager.get_answer_id_by_comment_id(comment_id)[0]['answer_id']
+        question_id = str(data_manager.get_question_id_by_answer_id(answer_id)[0]['question_id'])
+
     data_manager.delete_comment(comment_id)
     return redirect('/question/' + question_id)
 
