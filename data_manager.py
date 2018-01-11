@@ -174,6 +174,16 @@ def delete_question_and_its_answers(cursor, question_id):
 
 
 @connection.connection_handler
+def edit_answer(cursor, answer):
+    cursor.execute("""
+                    UPDATE answer
+                    SET message = %(message)s
+                    WHERE id = %(id)s;
+                    """,
+                   answer)
+
+
+@connection.connection_handler
 def delete_comment(cursor, comment_id):
     cursor.execute("""
                     DELETE FROM comment

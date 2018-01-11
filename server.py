@@ -41,8 +41,6 @@ def route_question_detail(question_id):
     question_comments = data_manager.get_comments_for_question(question_id)
     answer_comments = data_manager.get_answer_comments()
     add_answer_url = url_for('route_add_answer', question_id=question_id)
-    print(answers)
-    print(answer_comments)
     return render_template('question_detail.html',
                            question_id=question_id,
                            add_answer_url=add_answer_url,
@@ -136,6 +134,17 @@ def modify_question(question_id):
 def delete_question(question_id):
     data_manager.delete_question_and_its_answers(question_id)
     return redirect('/')
+
+
+@app.route('/answer/<answer_id>/edit', methods=['POST', 'GET'])
+def route_edit_answer(answer_id):
+    if request.method == 'POST':
+        answer_to_update = request.form.to_dict()
+        question_id = data_manager.get_question_id_for_answer(answer_id)[0]['question_id']
+        data_manager.edit_answer(answer_to_update)
+        return redirect(url_for('route_question_detail', question_id = question_id))
+    answer = data_manager.get_answer_data(answer_id)[0]
+    return render_template('edit_answer.html', answer_id = answer_id, answer = answer)
 
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])

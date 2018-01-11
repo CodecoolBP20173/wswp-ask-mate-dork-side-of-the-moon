@@ -8,7 +8,7 @@
     <body>
         <h1>{{ question_data['title'] }}</h1>
         <p></p>
-        <table border="1" id="questions">
+        <table id="questions">
             <thead>
                 <tr>
                     {% for header in ('Submission time', 'View number', 'Message') %}
@@ -27,7 +27,7 @@
         <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a>
         <a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
         <h2>Comments for this question:</h2>
-       <table border="1" id="question_comments">
+       <table id="question_comments">
             <thead>
                 <tr>
                     {% for header in ('Submission time', 'Message') %}
@@ -46,10 +46,10 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p><button><a href="/question/{{ question_id }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button><br></p>
+        <p><button><a href="/question/{{ question_id }}/new-comment">Add new comment</a></button><br></p>
         <h2>Answers for this question:</h2>
         {% for answer in answers %}
-            <table border="1" id="answers">
+            <table id="answers">
                 <thead>
                     <tr>
                         {% for header in ('Submission time', 'Message') %}
@@ -62,12 +62,13 @@
                         {% for field in ('submission_time', 'message') %}
                             <td>{{ answer[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
-                        <td><button><a href="/answer/{{ answer['id'] }}/new-comment" style="color: black; text-decoration: none">Add new comment</a></button></td>
+                        <td><button><a href="/answer/{{ answer['id'] }}/edit">Edit answer</a></button></td>
+                        <td><button><a href="/answer/{{ answer['id'] }}/new-comment">Add new comment</a></button></td>
                     </tr>
                 </tbody>
             </table>
             <h3>Comments for this answer:</h3>
-            <table border="1" id="answer_comments_table">
+            <table id="answer_comments_table">
                 <thead>
                     <tr>
                         <th>Submission time</th>
@@ -88,9 +89,9 @@
             </table>
             <br>
         {% endfor %}
-        <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
+        <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
         <br>
-        <p><button><a href="/" style="color: black; text-decoration: none">Back to home page</a></button><br></p>
+        <p><button><a href="/">Back to home page</a></button><br></p>
     </body>
 </html>
