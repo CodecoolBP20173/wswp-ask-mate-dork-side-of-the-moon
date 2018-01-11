@@ -133,7 +133,7 @@ def get_comments_for_question(cursor, question_id):
 @connection.connection_handler
 def get_answer_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message, answer_id FROM comment
+                    SELECT submission_time, message, answer_id, id FROM comment
                    """)
     comments = cursor.fetchall()
     return comments
@@ -185,9 +185,32 @@ def delete_comment(cursor, comment_id):
 @connection.connection_handler
 def get_question_id_by_comment_id(cursor, comment_id):
     cursor.execute("""
-                    SELECT question_id FROM comment
+                    SELECT question_id, answer_id FROM comment
                     WHERE id = %(comment_id)s;
                    """,
                    {'comment_id': comment_id})
     comment_id = cursor.fetchall()
     return comment_id
+
+
+@connection.connection_handler
+def get_question_id_by_answer_id(cursor, id):
+    cursor.execute("""
+                    SELECT question_id FROM answer
+                    WHERE id = %(id)s;
+                   """,
+                   {'id': id})
+    comment_id = cursor.fetchall()
+    return comment_id
+
+
+@connection.connection_handler
+def get_answer_id_by_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT answer_id FROM comment
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+    comment_id = cursor.fetchall()
+    return comment_id
+
