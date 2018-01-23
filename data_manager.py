@@ -244,3 +244,15 @@ def edit_comment(cursor, comment):
                     WHERE id = %(id)s;
                     """,
                    comment)
+
+
+@connection.connection_handler
+def sign_up(cursor, new_user_data):
+    try:
+        cursor.execute("""
+                      INSERT INTO site_user (user_name, password)
+                      VALUES (%(new_user_name)s, %(new_password)s)
+                      """, new_user_data);
+        return False
+    except:
+        return True

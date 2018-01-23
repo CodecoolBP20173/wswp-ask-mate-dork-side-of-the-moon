@@ -3,11 +3,12 @@ from flask import Flask, render_template, request, redirect, url_for
 import data_manager
 import connection
 import util
+import hashing
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/index')
 def index_page():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     data_table = data_manager.get_five_last_question_for_index()
@@ -162,13 +163,38 @@ def delete_comment(comment_id):
 
 @app.route('/comments/<comment_id>/edit', methods=['POST', 'GET'])
 def update_comment(comment_id):
+
     if request.method == 'POST':
         comment_to_update = request.form.to_dict()
         data_manager.edit_comment(comment_to_update)
         question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
         return redirect('/question/'+question_id)
+
     comment = data_manager.get_comment_by_id(comment_id)
     return render_template('edit_comment.html', comment_id = comment_id, comment = comment)
+
+
+@app.route('/', methods=['POST', 'GET'])
+def sign_up_screen():
+
+    sign_up_message = ""
+
+    if request.method == 'POST':
+        new_user_data = request.form.to_dict()
+        new_user_data["new_password"] = hashing.hash_password(new_user_data["new_password"])
+
+        if "new_user_name" in new_user_data:
+            unsuccessful_sign_up = data_manager.sign_up(new_user_data)
+
+            if unsuccessful_sign_up == True:
+                sign_up_message = "Username taken. Enter another name."
+                return render_template('login.html', sign_up_message = sign_up_message)
+
+            else:
+                sign_up_message = "Sign up successful. Login allowed"
+                return render_template('login.html', sign_up_message = sign_up_message)
+
+    return render_template('login.html', sign_up_message = sign_up_message)
 
 
 if __name__ == '__main__':
