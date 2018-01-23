@@ -171,6 +171,12 @@ def update_comment(comment_id):
     return render_template('edit_comment.html', comment_id = comment_id, comment = comment)
 
 
+@app.route('/user_list')
+def user_list():
+    user_data = data_manager.get_user_data()
+    return render_template('user_list.html', user_data=user_data)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

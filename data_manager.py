@@ -244,3 +244,12 @@ def edit_comment(cursor, comment):
                     WHERE id = %(id)s;
                     """,
                    comment)
+
+
+@connection.connection_handler
+def get_user_data(cursor):
+    cursor.execute("""
+                      SELECT id, user_name, registration_date FROM site_user;
+                      """)
+    user_data = cursor.fetchall()
+    return user_data

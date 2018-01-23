@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List users</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<p>
+ <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Registration date</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for data in user_data %}
+                    <tr>
+                        <td>{{ data['id'] }}</td>
+                        <td>{{ data['user_name'] }}</td>
+                        <td>{{ data['registration_date'] }}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+ <p><button><a href="/">Back to home page</a></button></p>
+</body>
+</html>
