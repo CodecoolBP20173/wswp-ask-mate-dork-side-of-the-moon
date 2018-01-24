@@ -11,21 +11,24 @@
         <table id="questions">
             <thead>
                 <tr>
-                    {% for header in ('Submission time', 'View number', 'Message') %}
+                    {% for header in ('Submission time', 'View number', 'Message', 'Posted by') %}
                         <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {% for field in ('submission_time', 'view_number', 'message') %}
+                    {% for field in ('submission_time', 'view_number', 'message', 'user_name') %}
                         <td align="{{ 'center' if field == 'view_number' }}">{{ question_data[field]|replace('\n', '<br>')|safe }}</td>
                     {% endfor %}
                 </tr>
             </tbody>
         </table>
-        <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a>
-        <a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
+        {% if question_data.user_name == session_user %}
+            <p><a href="/question/{{ question_id }}/edit"><button>Edit question</button></a>
+            <a href="/question/{{ question_id }}/delete"><button>Delete question</button></a></p>
+        {% endif %}
+
         {% if question_comments %}
         <h2>Comments for this question:</h2>
             <table id="question_comments">
