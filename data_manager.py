@@ -27,11 +27,12 @@ def get_five_last_question_for_index(cursor):
 @connection.connection_handler
 def get_question_data(cursor, question_id):
     cursor.execute("""
-                      SELECT submission_time, view_number, title, message FROM question
-                      WHERE id = %(question_id)s;
+                      SELECT submission_time, view_number, title, message, user_name FROM question
+                      JOIN site_user ON question.site_user_id = site_user.id
+                      WHERE question.id = %(question_id)s;
                       """,
                    {'question_id': question_id})
-    question_data = cursor.fetchall()
+    question_data = cursor.fetchone()
     return question_data
 
 
@@ -78,17 +79,17 @@ def increment_view_number(cursor, question_id):
 
 
 @connection.connection_handler
-def add_question(cursor, new_question):
+def add_question_to_database_return_its_id(cursor, new_question):
     cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, site_user_id)
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, %(site_user_id)s)
                     """, new_question)
     cursor.execute("""
                     SELECT id FROM question
                     ORDER BY id DESC
                     LIMIT 1;
                     """)
-    question_id = cursor.fetchall()
+    question_id = cursor.fetchone()
     return question_id
 
 
@@ -255,7 +256,8 @@ def get_user_data(cursor):
     user_data = cursor.fetchall()
     return user_data
   
-  
+
+@connection.connection_handler
 def get_hashed_password_by_user_name(cursor, user_name):
     cursor.execute("""
                     SELECT password FROM site_user
