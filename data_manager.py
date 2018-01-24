@@ -244,3 +244,14 @@ def edit_comment(cursor, comment):
                     WHERE id = %(id)s;
                     """,
                    comment)
+
+
+@connection.connection_handler
+def get_hashed_password_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT password FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    password = cursor.fetchone()
+    return password
