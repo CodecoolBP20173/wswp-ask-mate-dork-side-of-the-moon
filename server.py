@@ -72,7 +72,7 @@ def route_add_answer(question_id):
         data_manager.add_new_answer(new_answer)
         return redirect(question_detail_url)
 
-    question_data = data_manager.get_question_data(question_id)[0]
+    question_data = data_manager.get_question_data(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     add_answer_url = url_for('route_add_answer', question_id=question_id)
     return render_template('add_answer.html',
