@@ -106,8 +106,8 @@ def search_questions(cursor, search_phrase):
 @connection.connection_handler
 def add_new_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (question_id, message, submission_time)
-                      VALUES (%(question_id)s, %(message)s, %(submission_time)s); 
+                      INSERT INTO comment (question_id, message, submission_time, site_user_id)
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(site_user_id)s); 
                       """,
                    new_comment)
 
@@ -115,8 +115,8 @@ def add_new_comment(cursor, new_comment):
 @connection.connection_handler
 def add_new_answer_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (answer_id, message, submission_time)
-                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s)
+                      INSERT INTO comment (answer_id, message, submission_time, site_user_id)
+                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s, %(site_user_id)s) 
                     """,
                    new_comment)
 
@@ -124,7 +124,8 @@ def add_new_answer_comment(cursor, new_comment):
 @connection.connection_handler
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT submission_time, message, id FROM comment
+                    SELECT submission_time, message, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                     WHERE question_id = %(question_id)s;
                    """,
                    {'question_id': question_id})
@@ -135,7 +136,8 @@ def get_comments_for_question(cursor, question_id):
 @connection.connection_handler
 def get_answer_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message, answer_id, id FROM comment
+                    SELECT submission_time, message, answer_id, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                    """)
     comments = cursor.fetchall()
     return comments
@@ -255,7 +257,7 @@ def get_user_data(cursor):
                       """)
     user_data = cursor.fetchall()
     return user_data
-  
+
 
 @connection.connection_handler
 def get_hashed_password_by_user_name(cursor, user_name):
@@ -266,7 +268,6 @@ def get_hashed_password_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     password = cursor.fetchone()
     return password
-
 
 
 @connection.connection_handler
@@ -291,3 +292,13 @@ def get_id_by_user_name(cursor, user_name):
     id = cursor.fetchone()
     return id
 
+
+@connection.connection_handler
+def get_site_user_id_by_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT site_user_id FROM comment
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+    site_user_id = cursor.fetchone()
+    return site_user_id
