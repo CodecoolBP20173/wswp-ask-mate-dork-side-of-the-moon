@@ -104,8 +104,8 @@ def search_questions(cursor, search_phrase):
 @connection.connection_handler
 def add_new_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (question_id, message, submission_time)
-                      VALUES (%(question_id)s, %(message)s, %(submission_time)s); 
+                      INSERT INTO comment (question_id, message, submission_time, site_user_id)
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(site_user_id)s); 
                       """,
                    new_comment)
 
@@ -113,8 +113,8 @@ def add_new_comment(cursor, new_comment):
 @connection.connection_handler
 def add_new_answer_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (answer_id, message, submission_time)
-                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s) 
+                      INSERT INTO comment (answer_id, message, submission_time, site_user_id)
+                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s, %(site_user_id)s) 
                     """,
                    new_comment)
 
@@ -253,8 +253,9 @@ def get_user_data(cursor):
                       """)
     user_data = cursor.fetchall()
     return user_data
-  
-  
+
+
+@connection.connection_handler
 def get_hashed_password_by_user_name(cursor, user_name):
     cursor.execute("""
                     SELECT password FROM site_user
@@ -263,7 +264,6 @@ def get_hashed_password_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     password = cursor.fetchone()
     return password
-
 
 
 @connection.connection_handler
@@ -287,4 +287,3 @@ def get_id_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     id = cursor.fetchone()
     return id
-  
