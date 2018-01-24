@@ -257,7 +257,6 @@ def get_hashed_password_by_user_name(cursor, user_name):
     return password
 
 
-
 @connection.connection_handler
 def sign_up(cursor, new_user_data):
     try:
