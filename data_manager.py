@@ -248,6 +248,14 @@ def edit_comment(cursor, comment):
 
 
 @connection.connection_handler
+def get_user_data(cursor):
+    cursor.execute("""
+                      SELECT id, user_name, registration_date FROM site_user;
+                      """)
+    user_data = cursor.fetchall()
+    return user_data
+  
+  
 def get_hashed_password_by_user_name(cursor, user_name):
     cursor.execute("""
                     SELECT password FROM site_user
@@ -280,3 +288,4 @@ def get_id_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     id = cursor.fetchone()
     return id
+
