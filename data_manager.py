@@ -253,3 +253,38 @@ def get_user_data(cursor):
                       """)
     user_data = cursor.fetchall()
     return user_data
+  
+  
+def get_hashed_password_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT password FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    password = cursor.fetchone()
+    return password
+
+
+
+@connection.connection_handler
+def sign_up(cursor, new_user_data):
+    try:
+        cursor.execute("""
+                      INSERT INTO site_user (user_name, password)
+                      VALUES (%(new_user_name)s, %(new_password)s)
+                      """, new_user_data);
+        return False
+    except:
+        return True
+
+
+@connection.connection_handler
+def get_id_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT id FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    id = cursor.fetchone()
+    return id
+  
