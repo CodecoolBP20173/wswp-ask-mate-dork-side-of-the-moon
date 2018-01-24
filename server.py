@@ -167,7 +167,7 @@ def route_edit_answer(answer_id):
     if logged_in == owner_id:
         return render_template('edit_answer.html', answer_id = answer_id, answer = answer)
     else:
-        return redirect(url_for('route_question_detail', question_id = question_id))
+        return redirect('https://i.imgflip.com/239qx5.jpg')
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
 @login.login_required
