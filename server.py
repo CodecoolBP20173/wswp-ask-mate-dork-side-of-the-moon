@@ -43,7 +43,7 @@ def route_add_question():
 @login.login_required
 def route_question_detail(question_id):
     data_manager.increment_view_number(question_id)
-    question_data = data_manager.get_question_data(question_id)[0]
+    question_data = data_manager.get_question_data(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     question_comments = data_manager.get_comments_for_question(question_id)
     answer_comments = data_manager.get_answer_comments()
@@ -134,22 +134,27 @@ def add_answer_comment(answer_id):
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 @login.login_required
 def modify_question(question_id):
-    if request.method == 'POST':
-        question_to_update = request.form.to_dict()
-        data_manager.edit_question(question_to_update)
-        return redirect(url_for('route_question_detail',
-                                question_id=question_id))
-    question = data_manager.get_question_data(question_id)[0]
-    return render_template('add_question.html',
-                           question=question,
-                           question_id=question_id)
+    question = data_manager.get_question_data(question_id)
+    if question["user_name"] == session["user_name"]:
+        if request.method == 'POST':
+            question_to_update = request.form.to_dict()
+            data_manager.edit_question(question_to_update)
+            return redirect(url_for('route_question_detail',
+                                    question_id=question_id))
+        return render_template('add_question.html',
+                               question=question,
+                               question_id=question_id)
+    return redirect(url_for('sign_up_screen'))
 
 
 @app.route('/question/<question_id>/delete', methods=['POST', 'GET'])
 @login.login_required
 def delete_question(question_id):
-    data_manager.delete_question_and_its_answers(question_id)
-    return redirect('/')
+    question = data_manager.get_question_data(question_id)
+    if question["user_name"] == session["user_name"]:
+        data_manager.delete_question_and_its_answers(question_id)
+        return redirect('/')
+    return redirect(url_for('sign_up_screen'))
 
 
 @app.route('/answer/<answer_id>/edit', methods=['POST', 'GET'])

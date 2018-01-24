@@ -32,7 +32,7 @@ def get_question_data(cursor, question_id):
                       WHERE question.id = %(question_id)s;
                       """,
                    {'question_id': question_id})
-    question_data = cursor.fetchall()
+    question_data = cursor.fetchone()
     return question_data
 
 
