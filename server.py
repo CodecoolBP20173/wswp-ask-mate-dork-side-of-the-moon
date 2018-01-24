@@ -236,7 +236,7 @@ def sign_up_screen():
 if __name__ == '__main__':
     app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run(
-        host='192.168.160.129',
+        host='0.0.0.0',
         port=8000,
         debug=True,
     )
