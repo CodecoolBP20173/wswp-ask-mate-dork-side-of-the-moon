@@ -42,8 +42,10 @@
                             {% for field in ('submission_time', 'message', 'user_name') %}
                                 <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                             {% endfor %}
+                            {% if session_user == row['user_name'] %}
                             <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
                             <td><a href="{{ url_for('update_comment', comment_id=row['id']) }}" ><button>Update Comment</button></a></td>
+                            {% endif %}
 
                         </tr>
                     {% endfor %}
@@ -88,7 +90,9 @@
                                     <td>{{ comment['submission_time'] }}</td>
                                     <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
                                     <td>{{ comment['user_name'] }}</td>
+                                    {% if session_user == comment['user_name'] %}
                                     <td><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
+                                    {% endif %}
                                 </tr>
                             {% endif %}
                         {% endfor %}

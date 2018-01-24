@@ -14,7 +14,6 @@ def index_page():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     data_table = data_manager.get_five_last_question_for_index()
     five_questions = True
-    print(session['user_name'])
     return render_template('index.html', data_header=data_header, data_table=data_table, five_questions=five_questions)
 
 
@@ -55,7 +54,8 @@ def route_question_detail(question_id):
                            answers=answers,
                            question_comments=question_comments,
                            answer_comments=answer_comments,
-                           answer_id_list_for_comments=answer_id_list_for_comments)
+                           answer_id_list_for_comments=answer_id_list_for_comments,
+                           session_user=session['user_name'])
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
