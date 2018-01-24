@@ -56,17 +56,21 @@
             <table id="answers">
                 <thead>
                     <tr>
-                        {% for header in ('Submission time', 'Message') %}
+                        {% for header in ('Submission time', 'Message', "by: ") %}
                             <th>{{ header }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        {% for field in ('submission_time', 'message') %}
+                        {% for field in ('submission_time', 'message', 'user_name') %}
                             <td>{{ answer[field]|replace('\n', '<br>')|safe }}</td>
                         {% endfor %}
+
+                        {% if logged_in == answer['site_user_id'] %}
                         <td><button><a href="/answer/{{ answer['id'] }}/edit">Edit answer</a></button></td>
+                        {% endif %}
+
                         <td><button><a href="/answer/{{ answer['id'] }}/new-comment">Add new comment</a></button></td>
                     </tr>
                 </tbody>
@@ -98,6 +102,6 @@
         <p><button {% block hide_add_new_answer_button %}{% endblock %}><a href="{{ add_answer_url }}" style="color: black; text-decoration: none">Add new answer</a></button></p>
         <p>{% block answer_text_area %}{% endblock %}</p>
         <br>
-        <p><button><a href="/">Back to home page</a></button><br></p>
+        <p><button><a href="/index">Back to home page</a></button><br></p>
     </body>
 </html>

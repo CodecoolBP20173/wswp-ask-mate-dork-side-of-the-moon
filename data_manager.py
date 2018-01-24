@@ -38,7 +38,7 @@ def get_question_data(cursor, question_id):
 @connection.connection_handler
 def get_answer_data(cursor, answer_id):
     cursor.execute("""
-                      SELECT submission_time, message FROM answer
+                      SELECT submission_time, message, site_user_id, question_id FROM answer
                       WHERE id = %(answer_id)s;
                       """,
                    {'answer_id': answer_id})
@@ -49,7 +49,8 @@ def get_answer_data(cursor, answer_id):
 @connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
-                      SELECT submission_time, message, id FROM answer
+                      SELECT answer.submission_time, answer.message, answer.id, site_user_id, site_user.user_name FROM answer
+                      LEFT JOIN site_user ON answer.site_user_id = site_user.id
                       WHERE question_id = %(question_id)s;
                       """,
                    {'question_id': question_id})
@@ -60,8 +61,8 @@ def get_answers_for_question(cursor, question_id):
 @connection.connection_handler
 def add_new_answer(cursor, new_answer):
     cursor.execute("""
-                      INSERT INTO answer (submission_time, question_id, message)
-                      VALUES (%(submission_time)s, %(question_id)s, %(message)s) 
+                      INSERT INTO answer (submission_time, question_id, message, site_user_id)
+                      VALUES (%(submission_time)s, %(question_id)s, %(message)s, %(site_user_id)s) 
                       """,
                    new_answer)
 
@@ -114,7 +115,7 @@ def add_new_comment(cursor, new_comment):
 def add_new_answer_comment(cursor, new_comment):
     cursor.execute("""
                       INSERT INTO comment (answer_id, message, submission_time)
-                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s) 
+                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s)
                     """,
                    new_comment)
 
