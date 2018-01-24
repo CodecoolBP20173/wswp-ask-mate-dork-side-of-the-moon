@@ -14,7 +14,6 @@ def index_page():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     data_table = data_manager.get_five_last_question_for_index()
     five_questions = True
-    print(session['user_name'])
     return render_template('index.html', data_header=data_header, data_table=data_table, five_questions=five_questions)
 
 
@@ -49,6 +48,7 @@ def route_question_detail(question_id):
     answer_comments = data_manager.get_answer_comments()
     answer_id_list_for_comments = [row['answer_id'] for row in answer_comments]
     add_answer_url = url_for('route_add_answer', question_id=question_id)
+    logged_in = session['user_id']
     return render_template('question_detail.html',
                            question_id=question_id,
                            add_answer_url=add_answer_url,
@@ -57,6 +57,7 @@ def route_question_detail(question_id):
                            question_comments=question_comments,
                            answer_comments=answer_comments,
                            answer_id_list_for_comments=answer_id_list_for_comments,
+                           logged_in = logged_in,
                            session_user=session["user_name"])
 
 
@@ -67,6 +68,7 @@ def route_add_answer(question_id):
     if request.method == 'POST':
         new_answer = request.form.to_dict()
         new_answer['submission_time'] = util.get_datetime()
+        new_answer['site_user_id'] = session['user_id']
         data_manager.add_new_answer(new_answer)
         return redirect(question_detail_url)
 
@@ -167,8 +169,13 @@ def route_edit_answer(answer_id):
         data_manager.edit_answer(answer_to_update)
         return redirect(url_for('route_question_detail', question_id = question_id))
     answer = data_manager.get_answer_data(answer_id)[0]
-    return render_template('edit_answer.html', answer_id = answer_id, answer = answer)
-
+    logged_in = session['user_id']
+    owner_id = answer['site_user_id']
+    question_id = answer['question_id']
+    if logged_in == owner_id:
+        return render_template('edit_answer.html', answer_id = answer_id, answer = answer)
+    else:
+        return redirect('https://i.imgflip.com/239qx5.jpg')
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
 @login.login_required

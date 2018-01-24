@@ -5,6 +5,7 @@
         <textarea name="message" id="message" cols="80" rows="10" minlength="1"></textarea>
         <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
         <input type="number" id="vote_number" name="vote_number" value="0" hidden>
+        <input type="text" id="site_user_id" name="site_user_id" value="{{ site_user_id }}" hidden>
         <br><input type="submit" id="submit_answer" form="add_answer_form" value="Submit answer">
     </form>
 {% endblock %}
