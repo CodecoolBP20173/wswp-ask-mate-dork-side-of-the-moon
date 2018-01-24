@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 import data_manager
 import connection
@@ -198,13 +198,14 @@ def sign_up_screen():
             login_data = request.form.to_dict()
             unhashed_password = login_data['password']
             user_name = login_data['user_name']
-            hashed_password = data_manager.get_hashed_password_by_user_name(user_name)
+            hashed_password_dict = data_manager.get_hashed_password_by_user_name(user_name)
 
-            if hashed_password is None:
+            if hashed_password_dict is None:
                 sign_up_message = "Incorrect user name or password."
                 return render_template('login.html', sign_up_message=sign_up_message)
 
             else:
+                hashed_password = hashed_password_dict['password']
                 verified = hashing.verify_password(unhashed_password, hashed_password)
 
                 if verified:
