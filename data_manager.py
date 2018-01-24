@@ -255,3 +255,16 @@ def get_hashed_password_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     password = cursor.fetchone()
     return password
+
+
+
+@connection.connection_handler
+def sign_up(cursor, new_user_data):
+    try:
+        cursor.execute("""
+                      INSERT INTO site_user (user_name, password)
+                      VALUES (%(new_user_name)s, %(new_password)s)
+                      """, new_user_data);
+        return False
+    except:
+        return True
