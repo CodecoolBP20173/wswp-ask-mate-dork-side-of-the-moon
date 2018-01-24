@@ -122,7 +122,8 @@ def add_new_answer_comment(cursor, new_comment):
 @connection.connection_handler
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT submission_time, message, id FROM comment
+                    SELECT submission_time, message, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                     WHERE question_id = %(question_id)s;
                    """,
                    {'question_id': question_id})
@@ -133,7 +134,8 @@ def get_comments_for_question(cursor, question_id):
 @connection.connection_handler
 def get_answer_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message, answer_id, id FROM comment
+                    SELECT submission_time, message, answer_id, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                    """)
     comments = cursor.fetchall()
     return comments

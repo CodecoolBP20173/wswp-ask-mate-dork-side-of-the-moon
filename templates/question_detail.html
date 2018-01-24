@@ -31,7 +31,7 @@
             <table id="question_comments">
                 <thead>
                     <tr>
-                        {% for header in ('Submission time', 'Message') %}
+                        {% for header in ('Submission time', 'Message', 'Posted by') %}
                             <th>{{ header }}</th>
                         {% endfor %}
                     </tr>
@@ -39,7 +39,7 @@
                 <tbody>
                     {% for row in question_comments %}
                         <tr>
-                            {% for field in ('submission_time', 'message') %}
+                            {% for field in ('submission_time', 'message', 'user_name') %}
                                 <td>{{ row[field]|replace('\n', '<br>')|safe }}</td>
                             {% endfor %}
                             <td><a href="{{ url_for('delete_comment', comment_id=row['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
@@ -78,6 +78,7 @@
                         <tr>
                             <th>Submission time</th>
                             <th>Message</th>
+                            <th>Posted by</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,6 +87,7 @@
                                 <tr>
                                     <td>{{ comment['submission_time'] }}</td>
                                     <td>{{ comment['message']|replace('\n', '<br>')|safe }}</td>
+                                    <td>{{ comment['user_name'] }}</td>
                                     <td><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}" ><button><img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Folder%20and%20Places/Trash-Recyclebin-Empty-Closed.png" class="recycle_bin"></button></a></td>
                                 </tr>
                             {% endif %}
