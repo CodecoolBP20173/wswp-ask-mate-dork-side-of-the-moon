@@ -268,3 +268,14 @@ def sign_up(cursor, new_user_data):
         return False
     except:
         return True
+
+
+@connection.connection_handler
+def get_id_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT id FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    id = cursor.fetchone()
+    return id
