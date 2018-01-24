@@ -1,22 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 import data_manager
-import connection
 import util
 import hashing
+import login
 
 app = Flask(__name__)
 
 
 @app.route('/index')
+@login.login_required
 def index_page():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     data_table = data_manager.get_five_last_question_for_index()
     five_questions = True
+    print(session['user_name'])
     return render_template('index.html', data_header=data_header, data_table=data_table, five_questions=five_questions)
 
 
 @app.route('/list')
+@login.login_required
 def route_list():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     data_table = data_manager.get_question_for_index()
@@ -24,6 +27,7 @@ def route_list():
 
 
 @app.route('/add-question', methods=['POST', 'GET'])
+@login.login_required
 def route_add_question():
     if request.method == 'POST':
         new_question = request.form.to_dict()
@@ -35,6 +39,7 @@ def route_add_question():
 
 
 @app.route('/question/<question_id>')
+@login.login_required
 def route_question_detail(question_id):
     data_manager.increment_view_number(question_id)
     question_data = data_manager.get_question_data(question_id)[0]
@@ -54,6 +59,7 @@ def route_question_detail(question_id):
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
+@login.login_required
 def route_add_answer(question_id):
     question_detail_url = url_for('route_question_detail', question_id=question_id)
     if request.method == 'POST':
@@ -73,6 +79,7 @@ def route_add_answer(question_id):
 
 
 @app.route('/search-question', methods=['GET'])
+@login.login_required
 def search_question():
     data_header = data_manager.FANCY_QUESTION_DATA_HEADER
     search_phrase = request.args.get('q')
@@ -85,6 +92,7 @@ def search_question():
 
 
 @app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
+@login.login_required
 def add_question_comment(question_id):
     question_detail_url = url_for('route_question_detail', question_id=question_id)
     if request.method == 'POST':
@@ -103,6 +111,7 @@ def add_question_comment(question_id):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
+@login.login_required
 def add_answer_comment(answer_id):
     question_detail_url = url_for('route_question_detail', question_id=data_manager.get_question_id_for_answer(answer_id)[0]['question_id'])
     if request.method == 'POST':
@@ -121,6 +130,7 @@ def add_answer_comment(answer_id):
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+@login.login_required
 def modify_question(question_id):
     if request.method == 'POST':
         question_to_update = request.form.to_dict()
@@ -134,12 +144,14 @@ def modify_question(question_id):
 
 
 @app.route('/question/<question_id>/delete', methods=['POST', 'GET'])
+@login.login_required
 def delete_question(question_id):
     data_manager.delete_question_and_its_answers(question_id)
     return redirect('/')
 
 
 @app.route('/answer/<answer_id>/edit', methods=['POST', 'GET'])
+@login.login_required
 def route_edit_answer(answer_id):
     if request.method == 'POST':
         answer_to_update = request.form.to_dict()
@@ -151,6 +163,7 @@ def route_edit_answer(answer_id):
 
 
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
+@login.login_required
 def delete_comment(comment_id):
     question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
     if question_id == 'None':
@@ -162,6 +175,7 @@ def delete_comment(comment_id):
 
 
 @app.route('/comments/<comment_id>/edit', methods=['POST', 'GET'])
+@login.login_required
 def update_comment(comment_id):
 
     if request.method == 'POST':
@@ -181,9 +195,9 @@ def sign_up_screen():
 
     if request.method == 'POST':
         new_user_data = request.form.to_dict()
-        new_user_data["new_password"] = hashing.hash_password(new_user_data["new_password"])
 
         if "new_user_name" in new_user_data:
+            new_user_data["new_password"] = hashing.hash_password(new_user_data["new_password"])
             unsuccessful_sign_up = data_manager.sign_up(new_user_data)
 
             if unsuccessful_sign_up == True:
@@ -194,10 +208,33 @@ def sign_up_screen():
                 sign_up_message = "Sign up successful. Login allowed"
                 return render_template('login.html', sign_up_message = sign_up_message)
 
+        else:
+            login_data = request.form.to_dict()
+            unhashed_password = login_data['password']
+            user_name = login_data['user_name']
+            hashed_password_dict = data_manager.get_hashed_password_by_user_name(user_name)
+
+            if hashed_password_dict is None:
+                sign_up_message = "Incorrect user name or password."
+                return render_template('login.html', sign_up_message=sign_up_message)
+
+            else:
+                hashed_password = hashed_password_dict['password']
+                verified = hashing.verify_password(unhashed_password, hashed_password)
+
+                if verified:
+                    session['user_id'] = data_manager.get_id_by_user_name(user_name)['id']
+                    session['user_name'] = login_data['user_name']
+                    return redirect(url_for('index_page'))
+
+                else:
+                    sign_up_message = "Incorrect user name or password."
+
     return render_template('login.html', sign_up_message = sign_up_message)
 
 
 if __name__ == '__main__':
+    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run(
         host='0.0.0.0',
         port=8000,
