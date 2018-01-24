@@ -144,7 +144,8 @@ def modify_question(question_id):
         return render_template('add_question.html',
                                question=question,
                                question_id=question_id)
-    return redirect(url_for('sign_up_screen'))
+    
+    return redirect("https://i.imgflip.com/239qx5.jpg")
 
 
 @app.route('/question/<question_id>/delete', methods=['POST', 'GET'])
@@ -154,7 +155,7 @@ def delete_question(question_id):
     if question["user_name"] == session["user_name"]:
         data_manager.delete_question_and_its_answers(question_id)
         return redirect('/')
-    return redirect(url_for('sign_up_screen'))
+    return redirect("https://i.imgflip.com/239qx5.jpg")
 
 
 @app.route('/answer/<answer_id>/edit', methods=['POST', 'GET'])
