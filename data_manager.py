@@ -289,3 +289,14 @@ def get_id_by_user_name(cursor, user_name):
                    {'user_name': user_name})
     id = cursor.fetchone()
     return id
+
+
+@connection.connection_handler
+def get_site_user_id_by_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT site_user_id FROM comment
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+    site_user_id = cursor.fetchone()
+    return site_user_id

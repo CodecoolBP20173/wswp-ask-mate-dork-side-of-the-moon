@@ -167,6 +167,9 @@ def route_edit_answer(answer_id):
 @app.route('/comments/<comment_id>/delete', methods=['POST', 'GET'])
 @login.login_required
 def delete_comment(comment_id):
+    site_user_id = data_manager.get_site_user_id_by_comment_id(comment_id)
+    if site_user_id['site_user_id'] != session['user_id']:
+        return redirect('https://i.imgflip.com/239qx5.jpg')
     question_id = str(data_manager.get_question_id_by_comment_id(comment_id)[0]['question_id'])
     if question_id == 'None':
         answer_id = data_manager.get_answer_id_by_comment_id(comment_id)[0]['answer_id']
@@ -179,7 +182,9 @@ def delete_comment(comment_id):
 @app.route('/comments/<comment_id>/edit', methods=['POST', 'GET'])
 @login.login_required
 def update_comment(comment_id):
-
+    site_user_id = data_manager.get_site_user_id_by_comment_id(comment_id)
+    if site_user_id['site_user_id'] != session['user_id']:
+        return redirect('https://i.imgflip.com/239qx5.jpg')
     if request.method == 'POST':
         comment_to_update = request.form.to_dict()
         data_manager.edit_comment(comment_to_update)
