@@ -181,9 +181,9 @@ def sign_up_screen():
 
     if request.method == 'POST':
         new_user_data = request.form.to_dict()
-        new_user_data["new_password"] = hashing.hash_password(new_user_data["new_password"])
 
         if "new_user_name" in new_user_data:
+            new_user_data["new_password"] = hashing.hash_password(new_user_data["new_password"])
             unsuccessful_sign_up = data_manager.sign_up(new_user_data)
 
             if unsuccessful_sign_up == True:
@@ -193,6 +193,25 @@ def sign_up_screen():
             else:
                 sign_up_message = "Sign up successful. Login allowed"
                 return render_template('login.html', sign_up_message = sign_up_message)
+
+        else:
+            login_data = request.form.to_dict()
+            unhashed_password = login_data['password']
+            user_name = login_data['user_name']
+            hashed_password = data_manager.get_hashed_password_by_user_name(user_name)
+
+            if hashed_password is None:
+                sign_up_message = "Incorrect user name or password."
+                return render_template('login.html', sign_up_message=sign_up_message)
+
+            else:
+                verified = hashing.verify_password(unhashed_password, hashed_password)
+
+                if verified:
+                    return redirect(url_for('index_page'))
+
+                else:
+                    sign_up_message = "Incorrect user name or password."
 
     return render_template('login.html', sign_up_message = sign_up_message)
 
