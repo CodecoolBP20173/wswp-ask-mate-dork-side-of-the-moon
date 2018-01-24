@@ -32,7 +32,8 @@ def route_add_question():
     if request.method == 'POST':
         new_question = request.form.to_dict()
         new_question_add_to_database = util.initialize_view_number_and_vote_number_and_add_datetime(new_question)
-        question_id = data_manager.add_question(new_question_add_to_database)[0]['id']
+        new_question_add_to_database.update({"site_user_id": session["user_id"]})
+        question_id = data_manager.add_question_to_database_return_its_id(new_question_add_to_database)['id']
         return redirect(url_for('route_question_detail',
                                 question_id=question_id))
     return render_template('/add_question.html')
@@ -55,7 +56,8 @@ def route_question_detail(question_id):
                            answers=answers,
                            question_comments=question_comments,
                            answer_comments=answer_comments,
-                           answer_id_list_for_comments=answer_id_list_for_comments)
+                           answer_id_list_for_comments=answer_id_list_for_comments,
+                           session_user=session["user_name"])
 
 
 @app.route('/question/<question_id>/new-answer', methods=['POST', 'GET'])
