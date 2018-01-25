@@ -262,6 +262,13 @@ def sign_up_screen():
     return render_template('login.html', sign_up_message = sign_up_message)
 
 
+@app.route('/logout')
+@login.login_required
+def logout():
+    session.clear()
+    return redirect(url_for('sign_up_screen'))
+
+
 if __name__ == '__main__':
     app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run(
