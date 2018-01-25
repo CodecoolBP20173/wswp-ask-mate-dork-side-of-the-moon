@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>AskMate | Add question</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block head_title %}AskMate | Add question{% endblock %}
+
+{% block body %}
     {% if question %}
         <h1>Edit question</h1>
         <form action='/question/{{ question_id }}/edit' method="POST">
@@ -35,6 +32,4 @@
             <button type="submit">Add question</button>
         </form>
     {% endif %}
-    <p><button><a href="/">Back to home page</a></button></p>
-</body>
-</html>
+{% endblock %}

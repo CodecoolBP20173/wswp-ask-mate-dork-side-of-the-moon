@@ -53,6 +53,7 @@ a:hover {
     max-width: 20px;
     max-height: 20px;
 }
+
 #container {
     width: 700px;
     margin: 50pt auto;
@@ -98,4 +99,10 @@ a:hover {
 .login-sign_up-message {
     color: white;
     font-size: 18pt;
+}
+  
+#logout_button {
+    position:absolute;
+    right: 20px;
+    margin-top: 7px;
 }
