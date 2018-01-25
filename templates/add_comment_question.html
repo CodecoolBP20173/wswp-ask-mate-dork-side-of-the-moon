@@ -6,7 +6,7 @@
 
 {% block body %}
     <label for="question_table">The question:</label><br>
-    <h2>{{ question.title }}</h2>
+    <h2>{{ question.message }}</h2>
 
     <form action="{{ add_question_comment_url }}" method="POST" name="add_comment_form">
         <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
