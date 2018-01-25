@@ -11,7 +11,7 @@ body {
 }
 
 h1, h2, h3, label {
-    color: whitesmoke;
+    color: #fdf201;
 }
 
 h3 {
@@ -19,17 +19,15 @@ h3 {
 }
 
 table, td, th {
-    background-color: transparent;
     color: whitesmoke;
-    border-style: solid;
-    border-width: medium;
-    border-color: gainsboro;
+    border: 1px solid #fdf201;
     text-align: center;
     border-collapse: collapse;
 }
 
 td, th {
     padding: 10px;
+    background-color: rgba(192,192,192, 0.3);
 }
 
 #answer_comments_table {
@@ -41,7 +39,7 @@ button a{
 }
 
 a {
-    color: red;
+    color: #fdf201;
     text-decoration: none;
 }
 
@@ -63,7 +61,7 @@ a:hover {
 #login, #sign_up {
     width: 318px;
     padding: 20px;
-    border: 1px solid yellow;
+    border: 1px solid #fdf201;
     border-radius: 4px;
     background-color: rgba(192,192,192, 0.3);
 }
@@ -78,6 +76,7 @@ a:hover {
 }
 .login-sign_up {
     font-size: 24pt;
+    color: white;
        }
 .inputs {
     float: right;
@@ -86,6 +85,7 @@ a:hover {
 .labels {
     float: left;
     margin: 5px;
+    color: white;
 }
 .buttons {
     margin-top: 20px;
