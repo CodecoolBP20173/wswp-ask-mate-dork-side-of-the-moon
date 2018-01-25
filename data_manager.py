@@ -1,7 +1,5 @@
 import connection
 
-FANCY_QUESTION_DATA_HEADER = ['Submission time', 'View number', 'Title', 'Message']
-
 
 @connection.connection_handler
 def get_question_for_index(cursor):
@@ -27,29 +25,31 @@ def get_five_last_question_for_index(cursor):
 @connection.connection_handler
 def get_question_data(cursor, question_id):
     cursor.execute("""
-                      SELECT submission_time, view_number, title, message FROM question
-                      WHERE id = %(question_id)s;
+                      SELECT submission_time, view_number, title, message, user_name FROM question
+                      JOIN site_user ON question.site_user_id = site_user.id
+                      WHERE question.id = %(question_id)s;
                       """,
                    {'question_id': question_id})
-    question_data = cursor.fetchall()
+    question_data = cursor.fetchone()
     return question_data
 
 
 @connection.connection_handler
 def get_answer_data(cursor, answer_id):
     cursor.execute("""
-                      SELECT submission_time, message FROM answer
+                      SELECT submission_time, message, site_user_id, question_id FROM answer
                       WHERE id = %(answer_id)s;
                       """,
                    {'answer_id': answer_id})
-    answer_data = cursor.fetchall()
+    answer_data = cursor.fetchone()
     return answer_data
 
 
 @connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
-                      SELECT submission_time, message, id FROM answer
+                      SELECT answer.submission_time, answer.message, answer.id, site_user_id, site_user.user_name FROM answer
+                      LEFT JOIN site_user ON answer.site_user_id = site_user.id
                       WHERE question_id = %(question_id)s;
                       """,
                    {'question_id': question_id})
@@ -60,8 +60,8 @@ def get_answers_for_question(cursor, question_id):
 @connection.connection_handler
 def add_new_answer(cursor, new_answer):
     cursor.execute("""
-                      INSERT INTO answer (submission_time, question_id, message)
-                      VALUES (%(submission_time)s, %(question_id)s, %(message)s) 
+                      INSERT INTO answer (submission_time, question_id, message, site_user_id)
+                      VALUES (%(submission_time)s, %(question_id)s, %(message)s, %(site_user_id)s) 
                       """,
                    new_answer)
 
@@ -77,17 +77,17 @@ def increment_view_number(cursor, question_id):
 
 
 @connection.connection_handler
-def add_question(cursor, new_question):
+def add_question_to_database_return_its_id(cursor, new_question):
     cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, site_user_id)
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, %(site_user_id)s)
                     """, new_question)
     cursor.execute("""
                     SELECT id FROM question
                     ORDER BY id DESC
                     LIMIT 1;
                     """)
-    question_id = cursor.fetchall()
+    question_id = cursor.fetchone()
     return question_id
 
 
@@ -95,8 +95,8 @@ def add_question(cursor, new_question):
 def search_questions(cursor, search_phrase):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE title LIKE %(search)s OR message LIKE %(search)s;
-                    """, {'search': '%' + search_phrase + '%'})
+                    WHERE LOWER(title) LIKE %(search)s OR LOWER(message) LIKE %(search)s;
+                    """, {'search': '%' + search_phrase.lower() + '%'})
     questions = cursor.fetchall()
     return questions
 
@@ -104,8 +104,8 @@ def search_questions(cursor, search_phrase):
 @connection.connection_handler
 def add_new_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (question_id, message, submission_time)
-                      VALUES (%(question_id)s, %(message)s, %(submission_time)s); 
+                      INSERT INTO comment (question_id, message, submission_time, site_user_id)
+                      VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(site_user_id)s); 
                       """,
                    new_comment)
 
@@ -113,8 +113,8 @@ def add_new_comment(cursor, new_comment):
 @connection.connection_handler
 def add_new_answer_comment(cursor, new_comment):
     cursor.execute("""
-                      INSERT INTO comment (answer_id, message, submission_time)
-                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s) 
+                      INSERT INTO comment (answer_id, message, submission_time, site_user_id)
+                      VALUES (%(answer_id)s, %(message)s, %(submission_time)s, %(site_user_id)s) 
                     """,
                    new_comment)
 
@@ -122,7 +122,8 @@ def add_new_answer_comment(cursor, new_comment):
 @connection.connection_handler
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT submission_time, message, id FROM comment
+                    SELECT submission_time, message, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                     WHERE question_id = %(question_id)s;
                    """,
                    {'question_id': question_id})
@@ -133,7 +134,8 @@ def get_comments_for_question(cursor, question_id):
 @connection.connection_handler
 def get_answer_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message, answer_id, id FROM comment
+                    SELECT submission_time, message, answer_id, comment.id, user_name FROM comment
+                    JOIN site_user ON comment.site_user_id = site_user.id
                    """)
     comments = cursor.fetchall()
     return comments
@@ -146,7 +148,7 @@ def get_question_id_for_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                    """,
                    {'answer_id': answer_id})
-    question_id = cursor.fetchall()
+    question_id = cursor.fetchone()
     return question_id
 
 
@@ -199,7 +201,7 @@ def get_question_id_by_comment_id(cursor, comment_id):
                     WHERE id = %(comment_id)s;
                    """,
                    {'comment_id': comment_id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -210,7 +212,7 @@ def get_question_id_by_answer_id(cursor, id):
                     WHERE id = %(id)s;
                    """,
                    {'id': id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -221,7 +223,7 @@ def get_answer_id_by_comment_id(cursor, comment_id):
                     WHERE id = %(comment_id)s;
                    """,
                    {'comment_id': comment_id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -232,7 +234,7 @@ def get_comment_by_id(cursor, comment_id):
                     FROM comment
                     WHERE id = %(id)s;
                     """,
-                   {'id' : comment_id})
+                   {'id': comment_id})
     return cursor.fetchone()
 
 
@@ -244,3 +246,57 @@ def edit_comment(cursor, comment):
                     WHERE id = %(id)s;
                     """,
                    comment)
+
+
+@connection.connection_handler
+def get_user_data(cursor):
+    cursor.execute("""
+                      SELECT id, user_name, registration_date FROM site_user;
+                      """)
+    user_data = cursor.fetchall()
+    return user_data
+
+
+@connection.connection_handler
+def get_hashed_password_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT password FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    password = cursor.fetchone()
+    return password
+
+
+@connection.connection_handler
+def sign_up(cursor, new_user_data):
+    try:
+        cursor.execute("""
+                      INSERT INTO site_user (user_name, password)
+                      VALUES (%(new_user_name)s, %(new_password)s)
+                      """, new_user_data);
+        return False
+    except:
+        return True
+
+
+@connection.connection_handler
+def get_id_by_user_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT id FROM site_user
+                    WHERE user_name = %(user_name)s;
+                   """,
+                   {'user_name': user_name})
+    id = cursor.fetchone()
+    return id
+
+
+@connection.connection_handler
+def get_site_user_id_by_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT site_user_id FROM comment
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+    site_user_id = cursor.fetchone()
+    return site_user_id

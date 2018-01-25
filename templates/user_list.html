@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block head_title %}AskMate | User list{% endblock %}
+
+{% block body_heading%}User list{% endblock %}
+
+{% block body %}
+ <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Registration date</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for data in user_data %}
+                    <tr>
+                        <td>{{ data['id'] }}</td>
+                        <td>{{ data['user_name'] }}</td>
+                        <td>{{ data['registration_date'] }}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

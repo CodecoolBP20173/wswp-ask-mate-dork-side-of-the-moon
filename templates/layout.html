@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+     <h1>
+         {% block body_heading%}{% endblock %}
+         <button id="logout_button"><a href="{{ url_for('logout') }}">Logout</a></button>
+     </h1>
+    {% block body %}{% endblock %}
+    <p><button {% block hide_back_to_home_page_button %}{% endblock %}><a href="{{ url_for('index_page') }}">Back to home page</a></button></p>
+</body>
+</html>

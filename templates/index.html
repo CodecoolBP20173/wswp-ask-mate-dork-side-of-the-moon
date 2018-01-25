@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to AskMate!</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Welcome to AskMate!</h1>
-    <h2>Questions:</h2>
+{% extends "layout.html" %}
 
+{% block head_title %}Welcome to AskMate{% endblock %}
+
+{% block body_heading%}Welcome to AskMate!{% endblock %}
+
+{% block body %}
     <form action="{{ url_for('search_question') }}" method="GET">
         <input type="text" name="q" id="q" placeholder="search">
         <button type="submit">Search question</button>
     </form><br>
-
+    <p><a href=" {{ url_for('user_list') }}"><button>User list</button></a></p>
+    <h2>Questions:</h2>
     <table>
         <thead>
             <tr>
@@ -37,5 +34,6 @@
     {% if five_questions == True %}
     <p><a href=" {{ url_for('route_list') }}"><button>Show all of the questions</button></a></p>
     {% endif %}
-</body>
-</html>
+{% endblock %}
+
+{% block hide_back_to_home_page_button %}hidden{% endblock %}

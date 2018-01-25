@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>AskMate | Add comment</title>
-</head>
-<body>
-    <h1>Add comment to Answer</h1>
+{% extends "layout.html" %}
+
+{% block head_title %}AskMate | Add comment{% endblock %}
+
+{% block body_heading%}Add comment to Answer{% endblock %}
+
+{% block body %}
     <label for="answer_table">The answer:</label><br>
     <table id="answer_table">
         <thead>
@@ -33,5 +31,4 @@
         <button type="submit">Add comment</button>
         <button><a href="{{ question_detail_url }}">Back to the question page</a></button>
     </form>
-</body>
-</html>
+{% endblock %}
