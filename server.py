@@ -221,6 +221,7 @@ def user_list():
 def sign_up_screen():
 
     sign_up_message = ""
+    login_message = ""
 
     if request.method == 'POST':
         new_user_data = request.form.to_dict()
@@ -231,11 +232,15 @@ def sign_up_screen():
 
             if unsuccessful_sign_up == True:
                 sign_up_message = "Username taken. Enter another name."
-                return render_template('login.html', sign_up_message = sign_up_message)
+                return render_template('login.html',
+                                       sign_up_message = sign_up_message,
+                                       login_message=login_message)
 
             else:
                 sign_up_message = "Sign up successful. Login allowed"
-                return render_template('login.html', sign_up_message = sign_up_message)
+                return render_template('login.html',
+                                       sign_up_message = sign_up_message,
+                                       login_message=login_message)
 
         else:
             login_data = request.form.to_dict()
@@ -244,8 +249,10 @@ def sign_up_screen():
             hashed_password_dict = data_manager.get_hashed_password_by_user_name(user_name)
 
             if hashed_password_dict is None:
-                sign_up_message = "Incorrect user name or password."
-                return render_template('login.html', sign_up_message=sign_up_message)
+                login_message = "Incorrect user name or password."
+                return render_template('login.html',
+                                       sign_up_message=sign_up_message,
+                                       login_message=login_message)
 
             else:
                 hashed_password = hashed_password_dict['password']
@@ -257,9 +264,11 @@ def sign_up_screen():
                     return redirect(url_for('index_page'))
 
                 else:
-                    sign_up_message = "Incorrect user name or password."
+                    login_message = "Incorrect user name or password."
 
-    return render_template('login.html', sign_up_message = sign_up_message)
+    return render_template('login.html',
+                           sign_up_message = sign_up_message,
+                           login_message=login_message)
 
 
 if __name__ == '__main__':

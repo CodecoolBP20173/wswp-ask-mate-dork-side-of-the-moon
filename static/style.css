@@ -6,6 +6,9 @@ body {
     background-position: center;
     font-family: Helvetica;
 }
+* {
+    box-sizing: border-box;
+}
 
 h1, h2, h3, label {
     color: whitesmoke;
@@ -49,4 +52,50 @@ a:hover {
 .recycle_bin{
     max-width: 20px;
     max-height: 20px;
+}
+#container {
+    width: 700px;
+    margin: 50pt auto;
+    overflow: hidden;
+    text-align: center;
+}
+#login, #sign_up {
+    width: 318px;
+    padding: 20px;
+    border: 1px solid yellow;
+    border-radius: 4px;
+    background-color: rgba(192,192,192, 0.3);
+}
+#login {
+    float:left;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .9);
+}
+#sign_up {
+    float: right;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .9)
+}
+.login-sign_up {
+    font-size: 24pt;
+       }
+.inputs {
+    float: right;
+    margin: 5px;
+}
+.labels {
+    float: left;
+    margin: 5px;
+}
+.buttons {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 60%;
+    font-size: 12pt;
+}
+#login_message {
+    margin-bottom: 60px;
+}
+.login-sign_up-message {
+    color: white;
+    font-size: 18pt;
 }
