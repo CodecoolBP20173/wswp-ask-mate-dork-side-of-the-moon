@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List users</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<p>
+{% extends "layout.html" %}
+
+{% block head_title %}AskMate | User list{% endblock %}
+
+{% block body_heading%}User list{% endblock %}
+
+{% block body %}
  <table>
         <thead>
             <tr>
@@ -24,6 +23,4 @@
                 {% endfor %}
         </tbody>
     </table>
- <p><button><a href="{{ url_for('index_page') }}">Back to home page</a></button></p>
-</body>
-</html>
+{% endblock %}

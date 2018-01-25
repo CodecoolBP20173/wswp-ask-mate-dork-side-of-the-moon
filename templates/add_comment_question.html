@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>AskMate | Add comment</title>
-</head>
-<body>
-    <h1>Add comment to Question</h1>
+{% extends "layout.html" %}
+
+{% block head_title %}AskMate | Add comment{% endblock %}
+
+{% block body_heading%}Add comment to Question{% endblock %}
+
+{% block body %}
     <label for="question_table">The question:</label><br>
     <h2>{{ question.title }}</h2>
 
@@ -17,7 +15,5 @@
             <textarea name="message" cols="80" rows="10" minlength="5"></textarea>
         </p>
         <button type="submit">Add comment</button>
-        <button><a href="/">Back to home page</a></button>
     </form>
-</body>
-</html>
+{% endblock %}
