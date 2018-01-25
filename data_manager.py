@@ -97,8 +97,8 @@ def add_question_to_database_return_its_id(cursor, new_question):
 def search_questions(cursor, search_phrase):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE title LIKE %(search)s OR message LIKE %(search)s;
-                    """, {'search': '%' + search_phrase + '%'})
+                    WHERE LOWER(title) LIKE %(search)s OR LOWER(message) LIKE %(search)s;
+                    """, {'search': '%' + search_phrase.lower() + '%'})
     questions = cursor.fetchall()
     return questions
 

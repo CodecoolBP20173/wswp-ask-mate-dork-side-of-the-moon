@@ -8,24 +8,8 @@
 <body>
     <h1>Add comment to Question</h1>
     <label for="question_table">The question:</label><br>
-    <table name="question_table">
-        <thead>
-            <tr>
-                {% for head in data_header %}
-                    <th>{{ head }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for data in question %}
-                        <tr>
-                            <td>{{ data['submission_time'] }}</td>
-                            <td>{{ data['title']|safe }}</td>
-                            <td>{{ data['message']|replace('\n', '<br>')|safe}}</td>
-                        </tr>
-                    {% endfor %}
-        <tbody>
-    </table>
+    <h2>{{ question.title }}</h2>
+
     <form action="{{ add_question_comment_url }}" method="POST" name="add_comment_form">
         <input type="text" id="question_id" name="question_id" value="{{ question_id }}" hidden>
         <p>
