@@ -1,7 +1,5 @@
 import connection
 
-FANCY_QUESTION_DATA_HEADER = ['Submission time', 'View number', 'Title', 'Message']
-
 
 @connection.connection_handler
 def get_question_for_index(cursor):
@@ -43,7 +41,7 @@ def get_answer_data(cursor, answer_id):
                       WHERE id = %(answer_id)s;
                       """,
                    {'answer_id': answer_id})
-    answer_data = cursor.fetchall()
+    answer_data = cursor.fetchone()
     return answer_data
 
 
@@ -150,7 +148,7 @@ def get_question_id_for_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                    """,
                    {'answer_id': answer_id})
-    question_id = cursor.fetchall()
+    question_id = cursor.fetchone()
     return question_id
 
 
@@ -203,7 +201,7 @@ def get_question_id_by_comment_id(cursor, comment_id):
                     WHERE id = %(comment_id)s;
                    """,
                    {'comment_id': comment_id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -214,7 +212,7 @@ def get_question_id_by_answer_id(cursor, id):
                     WHERE id = %(id)s;
                    """,
                    {'id': id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -225,7 +223,7 @@ def get_answer_id_by_comment_id(cursor, comment_id):
                     WHERE id = %(comment_id)s;
                    """,
                    {'comment_id': comment_id})
-    comment_id = cursor.fetchall()
+    comment_id = cursor.fetchone()
     return comment_id
 
 
@@ -236,7 +234,7 @@ def get_comment_by_id(cursor, comment_id):
                     FROM comment
                     WHERE id = %(id)s;
                     """,
-                   {'id' : comment_id})
+                   {'id': comment_id})
     return cursor.fetchone()
 
 
